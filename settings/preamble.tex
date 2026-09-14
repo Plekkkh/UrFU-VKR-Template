@@ -2,6 +2,7 @@
 \pdfsuppresswarningpagegroup=1
 \documentclass[
   candidate, % document type
+  14pt, % font size
   subf % use and configure subfig package for nested figure numbering
 ]{disser}
 
@@ -9,11 +10,14 @@
 \usepackage[T2A]{fontenc} % поддержка кириллицы
 \usepackage[utf8]{inputenc} % кодировка исходного текста
 \usepackage[english,russian]{babel} % переключение языков
+\usepackage{indentfirst} % ПАКЕТ, чтобы был отступ текста после заголовка
+\usepackage{ragged2e}    % ДОБАВЬТЕ ЭТОТ ПАКЕТ для умного выравнивания
 
 % Геометрия страницы и графика
-\usepackage[left=3cm, right=1cm, top=2cm, bottom=2cm]{geometry} % поля страницы
+\usepackage[left=30mm, right=15mm, top=20mm, bottom=20mm]{geometry} % поля страницы
 \usepackage{graphicx} % подключение графики
 \usepackage{pdfpages} % вставка pdf-страниц
+\usepackage{float} % управление положением плавающих объектов
 
 % Таблицы
 \usepackage{array} % расширенные возможности для работы с таблицами
@@ -39,9 +43,90 @@
 \usepackage[onehalfspacing]{setspace} % полуторный интервал
 \usepackage{fancyhdr} % установка колонтитулов
 \usepackage{listings} % поддержка вставки исходного кода
+\usepackage{enumitem}
+
+\setlist{nosep} % Делает все списки максимально компактными
 
 % Установка шрифта Times New Roman
 \renewcommand{\rmdefault}{ftm}
+
+\makeatletter
+\renewcommand{\@dotsep}{1}
+\providecommand{\@chapapp}{\chaptername}
+\providecommand{\chaptername}{}
+\@ifundefined{prethechapter}{}{\renewcommand{\prethechapter}{}}
+\@ifundefined{postthechapter}{}{\renewcommand{\postthechapter}{\space}}
+\@ifundefined{prethesection}{}{\renewcommand{\prethesection}{}}
+\@ifundefined{postthesection}{}{\renewcommand{\postthesection}{\space}}
+\@ifundefined{prethesubsection}{}{\renewcommand{\prethesubsection}{}}
+\@ifundefined{postsubsection}{}{\renewcommand{\postsubsection}{\space}}
+\@ifundefined{prethesubsubsection}{}{\renewcommand{\prethesubsubsection}{}}
+\@ifundefined{postsubsubsection}{}{\renewcommand{\postsubsubsection}{\space}}
+
+% 2. Префиксы и постфиксы для ОГЛАВЛЕНИЯ (ToC)
+\@ifundefined{tocprethechapter}{}{\renewcommand{\tocprethechapter}{}}          % Убирает слово "Глава"
+\@ifundefined{tocpostthechapter}{}{\renewcommand{\tocpostthechapter}{\space}}  % Убирает точку после номера главы
+\@ifundefined{tocpostthesection}{}{\renewcommand{\tocpostthesection}{\space}}  % Убирает точку после номера раздела
+\@ifundefined{tocpostthesubsection}{}{\renewcommand{\tocpostthesubsection}{\space}} % Убирает точку после номера подраздела
+\@ifundefined{tocpostthesubsubsection}{}{\renewcommand{\tocpostthesubsubsection}{\space}}
+
+% Уменьшаем ширину блока под номер в оглавлении
+% Формат: \@dottedtocline{уровень}{отступ слева}{ширина блока под номер}
+\renewcommand*{\l@chapter}{\@dottedtocline{1}{0pt}{0pt}}
+\renewcommand*{\l@section}{\@dottedtocline{1}{1.1em}{1.5em}}
+\renewcommand*{\l@subsection}{\@dottedtocline{2}{2.1em}{2.3em}}
+% \renewcommand*{\l@subsubsection}{\@dottedtocline{3}{3.1em}{3.1em}} либо 3.5em
+
+\newcommand{\centeredheading}[1]{%
+  \par\medskip
+  \begin{center}
+    \normalfont\bfseries\normalsize #1
+  \end{center}
+  \par\medskip
+}
+\makeatother
+
+% Заголовки глав и разделов: обычный размер, но жирный шрифт, выравнивание по левому краю
+\renewcommand\thechapteralign{\RaggedRight}
+\renewcommand\thechapterfont{\normalfont\bfseries}
+\renewcommand\chapteralign{\RaggedRight}
+\renewcommand\chapterfont{\normalfont\bfseries}
+\renewcommand\schapteralign{\centering}
+\renewcommand\schapterfont{\normalfont\bfseries}
+
+\renewcommand\sectionfont{\normalfont\bfseries}
+\renewcommand\subsectionfont{\normalfont\bfseries}
+\renewcommand\subsubsectionfont{\normalfont\bfseries}
+\renewcommand\paragraphfont{\normalfont\bfseries}
+\renewcommand\subparagraphfont{\normalfont\bfseries}
+\renewcommand\sectionalign{\RaggedRight}
+\renewcommand\subsectionalign{\RaggedRight}
+\renewcommand\subsubsectionalign{\RaggedRight}
+\renewcommand\subparagraphalign{\RaggedRight}
+
+\setlength{\parindent}{1.25cm} % глобальный отступ для основного текста
+
+\renewcommand\chapterindent{1.25cm}
+\renewcommand\schapterindent{0pt}
+\renewcommand\sectionindent{1.25cm}
+\renewcommand\subsectionindent{1.25cm}
+\renewcommand\subsubsectionindent{1.25cm}
+\renewcommand\paragraphindent{1.25cm}
+\renewcommand\subparagraphindent{1.25cm}
+
+% Нормальный шрифт для пунктов оглавления
+\renewcommand\tocchapterfont{\normalfont}
+\renewcommand\tocchapterfillfont{\normalfont}
+\renewcommand\tocchapternumfont{\normalfont}
+\renewcommand\tocsectionfont{\normalfont}
+\renewcommand\tocsectionfillfont{\normalfont}
+\renewcommand\tocsectionnumfont{\normalfont}
+\renewcommand\tocsubsectionfont{\normalfont}
+\renewcommand\tocsubsectionfillfont{\normalfont}
+\renewcommand\tocsubsectionnumfont{\normalfont}
+\renewcommand\tocsubsubsectionfont{\normalfont}
+\renewcommand\tocsubsubsectionfillfont{\normalfont}
+\renewcommand\tocsubsubsectionnumfont{\normalfont}
 
 % Создание нового типа столбца для выравнивания содержимого по центру
 \newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
@@ -68,3 +153,13 @@
 % Установка стилей страницы и главы
 \pagestyle{footcenter}
 \chapterpagestyle{footcenter}
+
+% 2. Гарантированное отключение вывода ссылок \cite по всему тексту
+\AtBeginDocument{
+  \renewcommand{\cite}[1]{}
+}
+
+% Команда для инлайн-кода (как обратные кавычки в Markdown)
+\newcommand{\code}[1]{\mbox{\texttt{#1}}}
+
+\emergencystretch=3em % Разрешает дополнительное растяжение пробелов для предотвращения Overfull \hbox

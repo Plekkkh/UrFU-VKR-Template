@@ -76,10 +76,10 @@ lint_tex:
 	$(LATEXMK) $(LATEXMK_FLAGS) $<
 
 check_logs:
-	sh scripts/check_latex_logs.sh
+	bash scripts/check_latex_logs.sh
 
 smoke_pdf:
-	sh scripts/pdf_smoke_check.sh
+	bash scripts/pdf_smoke_check.sh
 
 clean:
 	$(RM) $(FILES_TO_BUILD) $(LOG_FILES) $(TEMPORARY_FILES)
