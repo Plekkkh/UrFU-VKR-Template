@@ -300,3 +300,5 @@ biblio/*.new
 /*.pdf
 .tmp/
 temp/
+
+*_bak/
