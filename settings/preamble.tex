@@ -23,6 +23,7 @@
 \usepackage{array} % расширенные возможности для работы с таблицами
 \usepackage{tabularx} % автоматический подбор ширины столбцов
 \usepackage{dcolumn} % выравнивание чисел по разделителю
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
 
 % Математика
 \usepackage{bm} % полужирное начертание для математических символов
@@ -73,7 +74,7 @@
 % Уменьшаем ширину блока под номер в оглавлении
 % Формат: \@dottedtocline{уровень}{отступ слева}{ширина блока под номер}
 \renewcommand*{\l@chapter}{\@dottedtocline{1}{0pt}{0pt}}
-\renewcommand*{\l@section}{\@dottedtocline{1}{1.1em}{1.5em}}
+\renewcommand*{\l@section}{\@dottedtocline{1}{1.1em}{2em}} % было 1.1em 1.5em
 \renewcommand*{\l@subsection}{\@dottedtocline{2}{2.1em}{2.3em}}
 % \renewcommand*{\l@subsubsection}{\@dottedtocline{3}{3.1em}{3.1em}} либо 3.5em
 

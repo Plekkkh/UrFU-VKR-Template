@@ -1,22 +1,25 @@
 % Подключение файла с настройками и подключенными пакетами
-\input{settings/preamble.tex}
+\input{settings/preamble}
 
 \begin{document}
 
 % Включение титульного листа (первая страница файла Title.pdf)
-\includepdf[pages={1-1}]{extra/Title.pdf}
+%\includepdf[pages={1-1}]{extra/Title.pdf}
+\input{extra/title}
 
 % Аннотация, Содержание, Введение
-\input{chapters/introduction.tex}
+\input{chapters/introduction}
 
 % Подключение глав
-\input{chapters/chapter_1.tex}
-\input{chapters/chapter_2.tex}
-% \input{chapters/chapter_3.tex}
-% \input{chapters/chapter_4.tex}
+\input{chapters/chapter_1}
+\input{chapters/chapter_2}
+\input{chapters/chapter_3}
+\input{chapters/chapter_4}
+\input{chapters/chapter_5}
+\input{chapters/chapter_6}
 
 % Заключение
-\input{chapters/conclusion.tex}
+% \input{chapters/conclusion}
 
 % Библиографический список
 % \input{chapters/bibliography.tex}
