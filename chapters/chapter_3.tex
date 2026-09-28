@@ -1,136 +1,189 @@
 \newpage
-\chapter{Осциллограммы и спектры}
+\chapter{Описание результатов}
 
-\section{Амплитудная модуляция}
+В результате концептуального и логического проектирования базы данных издательской компании разработана структура из 10 взаимосвязанных реляционных отношений.
+Ниже представлены детальные спецификации каждой таблицы с указанием атрибутов, типов данных, первичных/внешних ключей и доменных ограничений.
 
-\begin{figure}[H]
+% Таблица 5.1
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/AM_0.8}
-    \caption{Осциллограмма, спектр и векторная IQ-диаграмма АМ-сигнала при $m = 0.8$}
-    \label{fig:AM_0.8}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{position\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Суррогатный первичный ключ должности \\ \hline
+        \texttt{position\_name} & \texttt{NVARCHAR(50)} & NOT NULL, UNIQUE & Уникальное наименование должности («Менеджер», «Редактор») \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Positions}}
+    \label{tab:Positions}
+\end{table}
 
-\begin{figure}[H]
+% Таблица 5.2
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/AM_1.0}
-    \caption{Временная и частотная характеристики АМ-сигнала при предельной модуляции $m = 1.0$}
-    \label{fig:AM_1.0}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{employee\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Табельный номер (идентификатор) сотрудника \\ \hline
+        \texttt{first\_name} & \texttt{NVARCHAR(50)} & NOT NULL & Имя сотрудника \\ \hline
+        \texttt{last\_name} & \texttt{NVARCHAR(50)} & NOT NULL & Фамилия сотрудника \\ \hline
+        \texttt{patronymic} & \texttt{NVARCHAR(50)} & NULL & Отчество сотрудника (необязательное поле) \\ \hline
+        \texttt{position\_id} & \texttt{INT} & FK $\rightarrow$ Positions(position\_id), NOT NULL & Ссылка на должность сотрудника \\ \hline
+        \texttt{email} & \texttt{NVARCHAR(100)} & NOT NULL, UNIQUE & Корпоративный адрес электронной почты \\ \hline
+        \texttt{phone} & \texttt{NVARCHAR(20)} & NOT NULL & Контактный номер телефона \\ \hline
+        \texttt{hire\_date} & \texttt{DATE} & NOT NULL, DEFAULT GETDATE() & Дата приёма на работу \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Employees}}
+    \label{tab:Employees}
+\end{table}
 
-\section{Частотная модуляция}
-
-\begin{figure}[H]
+% Таблица 5.3
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/ChM_0.2}
-    \caption{Осциллограмма, спектр и фазовый портрет ЧМ-сигнала при $m = 0.2$}
-    \label{fig:ChM_0.2}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{author\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Уникальный код автора \\ \hline
+        \texttt{first\_name} & \texttt{NVARCHAR(50)} & NOT NULL & Имя автора \\ \hline
+        \texttt{last\_name} & \texttt{NVARCHAR(50)} & NOT NULL & Фамилия автора \\ \hline
+        \texttt{pen\_name} & \texttt{NVARCHAR(100)} & NULL & Литературный псевдоним \\ \hline
+        \texttt{email} & \texttt{NVARCHAR(100)} & NOT NULL, UNIQUE & Адрес электронной почты для связи \\ \hline
+        \texttt{phone} & \texttt{NVARCHAR(20)} & NOT NULL & Номер мобильного телефона \\ \hline
+        \texttt{inn} & \texttt{NVARCHAR(12)} & NOT NULL, UNIQUE & ИНН автора для начисления гонораров (п. 6 задания) \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Authors}}
+    \label{tab:Authors}
+\end{table}
 
-\begin{figure}[H]
+% Таблица 5.4
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/ChM_5.0}
-    \caption{Временная реализация, широкий многополосный спектр и кольцевой фазовый портрет ЧМ-сигнала при $m = 5.0$}
-    \label{fig:ChM_5.0}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{contract\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Идентификатор договора \\ \hline
+        \texttt{contract\_number} & \texttt{NVARCHAR(30)} & NOT NULL, UNIQUE & Регистрационный номер документа (п. 6 задания) \\ \hline
+        \texttt{signing\_date} & \texttt{DATE} & NOT NULL, DEFAULT GETDATE() & Дата заключения контракта \\ \hline
+        \texttt{manager\_id} & \texttt{INT} & FK $\rightarrow$ Employees(employee\_id), NOT NULL & Менеджер компании, подписавший контракт \\ \hline
+        \texttt{total\_fee} & \texttt{DECIMAL(12,2)} & NOT NULL, CHECK (total\_fee $>=$ 0) & Общий бюджет авторского вознаграждения \\ \hline
+        \texttt{contract\_status} & \texttt{NVARCHAR(20)} & NOT NULL, CHECK (IN (\ldots)) & Статус: «На согласовании», «Активен», «Завершен», «Расторгнут» \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Contracts}}
+    \label{tab:Contracts}
+\end{table}
 
-\section{Фазовая модуляция}
-
-\begin{figure}[H]
+% Таблица 5.5
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/PM_2.0}
-    \caption{Осциллограмма, спектр и фазовый портрет ФМ-сигнала при $m = 2.0$}
-    \label{fig:PM_2.0}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{book\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Идентификатор издания \\ \hline
+        \texttt{contract\_id} & \texttt{INT} & FK $\rightarrow$ Contracts(contract\_id), NOT NULL & Контракт, в рамках которого выпускается книга \\ \hline
+        \texttt{title} & \texttt{NVARCHAR(200)} & NOT NULL & Полное наименование книги \\ \hline
+        \texttt{isbn} & \texttt{NVARCHAR(17)} & NOT NULL, UNIQUE & Международный стандартный книжный номер (ISBN) \\ \hline
+        \texttt{publication\_year} & \texttt{INT} & NOT NULL, CHECK ($>=$ 1900 AND $<=$ тек.год+2) & Год издания книги \\ \hline
+        \texttt{pages\_count} & \texttt{INT} & NOT NULL, CHECK (pages\_count $>$ 0) & Количество страниц \\ \hline
+        \texttt{print\_run} & \texttt{INT} & NOT NULL, CHECK (print\_run $>$ 0) & Тираж экземпляров \\ \hline
+        \texttt{price} & \texttt{DECIMAL(10,2)} & NOT NULL, CHECK (price $>=$ 0) & Базовая отпускная розничная цена книги \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Books}}
+    \label{tab:Books}
+\end{table}
 
-\begin{figure}[H]
+% Таблица 5.6
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/PM_4.0}
-    \caption{Осциллограмма, спектр и замкнутый кольцевой фазовый портрет ФМ-сигнала при $m = 4.0$}
-    \label{fig:PM_4.0}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{book\_id} & \texttt{INT} & PK, FK $\rightarrow$ Books(book\_id), NOT NULL & Ссылка на книгу \\ \hline
+        \texttt{author\_id} & \texttt{INT} & PK, FK $\rightarrow$ Authors(author\_id), NOT NULL & Ссылка на автора \\ \hline
+        \texttt{author\_order} & \texttt{INT} & NOT NULL, CHECK (author\_order $>$ 0) & Порядок на обложке, влияющий на гонорар (требование ТЗ) \\ \hline
+        \texttt{royalty\_percent} & \texttt{DECIMAL(5,2)} & NOT NULL, CHECK ($>$ 0 AND $<=$ 100) & Индивидуальный процент авторского гонорара (роялти) \\ \hline
+        \textit{Ограничение} & --- & UNIQUE (book\_id, author\_order) & Запрет одинаковых порядковых номеров на обложке книги \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{BookAuthors}}
+    \label{tab:BookAuthors}
+\end{table}
 
-\section{Двухпозиционная фазовая манипуляция}
-
-\begin{figure}[H]
+% Таблица 5.7
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/BPSK}
-    \caption{Результаты моделирования сигнала ФМ-2}
-    \label{fig:BPSK}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{book\_id} & \texttt{INT} & PK, FK $\rightarrow$ Books(book\_id), NOT NULL & Ссылка на книгу \\ \hline
+        \texttt{editor\_id} & \texttt{INT} & PK, FK $\rightarrow$ Employees(employee\_id), NOT NULL & Ссылка на редактора \\ \hline
+        \texttt{is\_chief\_editor} & \texttt{BIT} & NOT NULL, DEFAULT 0 & Флаг ответственного редактора: 1 --- главный, 0 --- рядовой \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{BookEditors}}
+    \label{tab:BookEditors}
+\end{table}
 
-\section{Четырехпозиционная фазовая манипуляция}
-
-\begin{figure}[H]
+% Таблица 5.8
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/QPSK}
-    \caption{Результаты моделирования сигнала ФМ-4}
-    \label{fig:QPSK}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{customer\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Уникальный код заказчика \\ \hline
+        \texttt{customer\_name} & \texttt{NVARCHAR(150)} & NOT NULL & Наименование организации (магазина) или ФИО физлица \\ \hline
+        \texttt{contact\_person} & \texttt{NVARCHAR(100)} & NULL & ФИО ответственного контактного лица \\ \hline
+        \texttt{phone} & \texttt{NVARCHAR(20)} & NOT NULL & Контактный телефон контрагента \\ \hline
+        \texttt{email} & \texttt{NVARCHAR(100)} & NOT NULL & Электронная почта для счетов и уведомлений \\ \hline
+        \texttt{address} & \texttt{NVARCHAR(250)} & NOT NULL & Фактический адрес доставки тиража \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Customers}}
+    \label{tab:Customers}
+\end{table}
 
-\section{Двухпозиционная частотная манипуляция}
-
-\begin{figure}[H]
+% Таблица 5.9
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/FBSK}
-    \caption{Результаты моделирования сигнала ЧМ-2 при $m = 1$}
-    \label{fig:FBSK}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{order\_id} & \texttt{INT} & PK, IDENTITY(1,1), NOT NULL & Первичный идентификатор заказа \\ \hline
+        \texttt{order\_number} & \texttt{NVARCHAR(30)} & NOT NULL, UNIQUE & Уникальный номер заказа/накладной (п. 6 задания) \\ \hline
+        \texttt{customer\_id} & \texttt{INT} & FK $\rightarrow$ Customers(customer\_id), NOT NULL & Заказчик, оформивший заказ (требование ТЗ) \\ \hline
+        \texttt{order\_date} & \texttt{DATETIME} & NOT NULL, DEFAULT GETDATE() & Дата и время формирования заказа \\ \hline
+        \texttt{order\_status} & \texttt{NVARCHAR(20)} & NOT NULL, CHECK (IN (\ldots)) & Статус: «Новый», «В обработке», «Отгружен», «Выполнен», «Отменен» \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{Orders}}
+    \label{tab:Orders}
+\end{table}
 
-\section{Четырехпозиционная частотная манипуляция}
-
-\begin{figure}[H]
+% Таблица 5.10
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
     \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/FPSK}
-    \caption{Результаты моделирования сигнала ЧМ-4 при $m = 1$}
-    \label{fig:FPSK}
-\end{figure}
-
-\section{Амплитудно-фазовая манипуляция (АФМ-16)}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/APSK-16}
-    \caption{Результаты моделирования сигнала АФМ-16}
-    \label{fig:APSK-16}
-\end{figure}
-
-\section{Амплитудно-фазовая манипуляция (АФМ-32)}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/APSK-32}
-    \caption{Результаты моделирования сигнала АФМ-32}
-    \label{fig:APSK-32}
-\end{figure}
-
-\section{Квадратурная амплитудная манипуляция (КАМ-16)}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/QAM-16}
-    \caption{Результаты моделирования сигнала КАМ-16}
-    \label{fig:QAM-16}
-\end{figure}
-
-\section{Квадратурная амплитудная манипуляция (КАМ-32)}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/QAM-32}
-    \caption{Результаты моделирования сигнала КАМ-32}
-    \label{fig:QAM-32}
-\end{figure}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|}
+        \hline
+        \textbf{Поле} & \textbf{Тип данных} & \textbf{Свойства и ограничения} & \textbf{Описание / Назначение} \\ \hline
+        \texttt{order\_id} & \texttt{INT} & PK, FK $\rightarrow$ Orders(order\_id), NOT NULL & Ссылка на родительский заказ \\ \hline
+        \texttt{book\_id} & \texttt{INT} & PK, FK $\rightarrow$ Books(book\_id), NOT NULL & Ссылка на заказанную книгу \\ \hline
+        \texttt{quantity} & \texttt{INT} & NOT NULL, CHECK (quantity $>$ 0) & Заказанное количество экземпляров книги \\ \hline
+        \texttt{unit\_price} & \texttt{DECIMAL(10,2)} & NOT NULL, CHECK (unit\_price $>=$ 0) & Фактическая цена реализации за единицу товара \\ \hline
+    \end{tabularx}
+    \caption{Спецификация таблицы \texttt{OrderItems}}
+    \label{tab:OrderItems}
+\end{table}
