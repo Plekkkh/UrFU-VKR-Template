@@ -43,13 +43,13 @@
 
 Блок $FC$ в шестнадцатеричном виде:
 \begin{equation*}
-    FC = \text{9DBFDDE1A3105072}_{16}
+    FC = \text{9DBFD3ED1A315072}_{16}
 \end{equation*}
 
 Размерность полученного блока $FC$ составляет 64 бита, что соответствует 8 байтам.
 
 Сформируем 128-битный мастер-ключ аутентификации $K$ путем дублирования блока $FC$:
 \begin{equation}
-    K = FC \parallel FC = \text{9DBFDDE1A31050729DBFDDE1A3105072}_{16}
+    K = FC \parallel FC = \text{9DBFD3ED1A3150729DBFD3ED1A315072}_{16}
     \label{eq:K}
 \end{equation}
