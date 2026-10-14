@@ -1,15 +1,204 @@
 \newpage
-\chapter{Описание лабораторной установки}
+\chapter{Результаты измерений}
 
-Виртуальная лабораторная установка представляет собой интерактивный измерительный стенд, развернутый в среде MATLAB\@.
-Стенд содержит верхний блок органов управления (ручки настроек) и пять измерительных панелей (экранов), имитирующих работу реальных лабораторных приборов.
+\section{Исследование алгоритма COMP128-1}
 
-Лабораторная установка включает в себя:
-\begin{enumerate}
-    \item Блок ввода параметров (генератор): выбор типа модуляции (из 12 возможных), амплитуда $U_0$ (В), несущая частота $f_0$ (кГц), индекс модуляции $m$.
-    \item Панель В: Экран НЧ первичного сообщения в виде синусоиды или бинарного сигнала.
-    \item Панель А: Цифровой осциллограф результирующего ВЧ-радиосигнала во времени.
-    \item Панель Б: Анализатор спектра (БПФ) --- частотная область в линейном масштабе (В) или в логарифмическом масштабе (дБмкВ).
-    \item Панель Г: Векторный анализатор --- фазовый портрет сигнала на комплексной IQ-плоскости.
-    \item Панель Д: Измерительное табло параметров: $U_m$, $f_0$, $m$, девиация частоты или фазы, скорость.
-\end{enumerate}
+В программе «2G + 3G Authentication» установлен режим работы COMP128-1.
+В качестве ключа введен мастер-ключ аутентификации $K = \text{9DBFDDE1A31050729DBFDDE1A3105072}_{16}$, который был сформирован в формуле \eqref{eq:K} в главе~\ref{ch:homework}.
+Дальше было проведено моделирование для 20 значений параметра $\mathrm{RAND}$ с увеличением старшего байта на 1.
+Полученные результаты представлены в таблице~\ref{tab:comp128-1}.
+
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{|c|Y|Y|Y|}
+        \hline
+        № & $\mathrm{RAND}$ & $\mathrm{SRES}$ & $\mathrm{K_c}$ \\ \hline
+        0 & 00 & 93230A33 & 8FA927146E92DC00 \\ \hline
+        1 & 01 & 84709538 & 0F9FE147749DE800 \\ \hline
+        2 & 02 & D10271B2 & 38B6E9C4A7B83400 \\ \hline
+        3 & 03 & 6110498E & 28C96D65D0B95800 \\ \hline
+        4 & 04 & 8BB57E27 & C03C82489801A400 \\ \hline
+        5 & 05 & 3BD3480E & 6628469F11641000 \\ \hline
+        6 & 06 & EDAB276C & BB2BC6CB7E326400 \\ \hline
+        7 & 07 & DFE50C2F & 65E46875E1948800 \\ \hline
+        8 & 08 & B7247FA7 & A0A236B770E0F800 \\ \hline
+        9 & 09 & 5BFA5980 & 3E48BD81E44DAC00 \\ \hline
+        10 & 10 & A550043B & B445C7DC6F21F000 \\ \hline
+        11 & 11 & DEAFCDD0 & FE13711A6AD86000 \\ \hline
+        12 & 12 & A567FF02 & E4DA4804A6214400 \\ \hline
+        13 & 13 & BE70869B & 5BBF0BDDC1098400 \\ \hline
+        14 & 14 & 1C8196D5 & 1FBF293A0A5B2000 \\ \hline
+        15 & 15 & F64DF619 & 0385534376B52400 \\ \hline
+        16 & 16 & 3A782FFC & A6D10D038CD8B400 \\ \hline
+        17 & 17 & A55A9067 & 92958CF40107F800 \\ \hline
+        18 & 18 & DE4D5CAD & 39504C14F9ADBC00 \\ \hline
+        19 & 19 & 11DB55F2 & A6597530408A6000 \\ \hline
+    \end{tabularx}
+    \caption{Результаты моделирования алгоритма COMP128-1 при 20 значениях параметра $\mathrm{RAND}$}
+    \label{tab:comp128-1}
+\end{table}
+
+На рисунке~\ref{fig:comp128-1-plot} представлена зависимость значений $\mathrm{SRES}$ и старших 32 бит $\mathrm{K_c}$ от значения параметра $\mathrm{RAND}$ в логарифмическом масштабе.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=1\textwidth,
+        height=7.5cm,
+        ymode=log,
+        log basis y=10,
+        xlabel={Номер $\mathrm{RAND}$},
+        ylabel={Десятичное значение},
+        grid=both,
+        grid style={line width=.1pt, draw=gray!20},
+        major grid style={line width=.3pt, draw=gray!50},
+        xmin=0, xmax=19,
+        ymin=1e7, ymax=1e10,
+        legend pos=south east,
+        legend cell align={left}
+    ]
+    \addplot[color=blue, mark=square*, thick] coordinates {
+        (0, 2468547123) (1, 2221970744) (2, 3506663858) (3, 1628457358)
+        (4, 2343927335) (5, 1003702286) (6, 3987416940) (7, 3756329519)
+        (8, 3072556967) (9, 1543133568) (10, 2773484603) (11, 3736063440)
+        (12, 2775056130) (13, 3195045531) (14, 478254805) (15, 4132304409)
+        (16, 980955132) (17, 2774175847) (18, 3729611949) (19, 299587058)
+    };
+    \addlegendentry{$\mathrm{SRES}$}
+
+    \addplot[color=red, mark=triangle*, thick] coordinates {
+        (0, 2410227476) (1, 262136135) (2, 951511492) (3, 684289381)
+        (4, 3225190984) (5, 1713915551) (6, 3140208331) (7, 1709467765)
+        (8, 2694985399) (9, 1044954497) (10, 3024406492) (11, 4262687002)
+        (12, 3839444996) (13, 1539247069) (14, 532621626) (15, 59069251)
+        (16, 2798718211) (17, 2459274484) (18, 961563668) (19, 2790880560)
+    };
+    \addlegendentry{$\mathrm{K_{c, 32}}$}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Зависимость $\mathrm{SRES}$ и старших 32 бит $\mathrm{K_c}$ от значения $\mathrm{RAND}$ в логарифмическом масштабе}
+    \label{fig:comp128-1-plot}
+\end{figure}
+
+\section{Исследование алгоритма XOR (Test AKA)}
+
+В программе «2G + 3G Authentication» установлен режим работы XOR (Test AKA).
+Структура поля $\mathrm{AUTN}$, состоящего из 32 hex-символов, имеет следующую структуру:
+\begin{equation*}
+    \mathrm{AUTN} = \underbrace{\textcolor{sqnakcolor}{\mathrm{SQN} \oplus \mathrm{AK}}}_{\text{12 hex-символов}} \;\parallel\;
+    \underbrace{\textcolor{amfcolor}{\mathrm{AMF}}}_{\text{4 hex-символа}} \;\parallel\;
+    \underbrace{\textcolor{maccolor}{\mathrm{MAC-A}}}_{\text{16 hex-символов}}.
+\end{equation*}
+
+\subsection{Влияние параметра SQN}\label{subsec:param-sqn}
+
+Исходные данные:
+\begin{itemize}
+    \item $\mathrm{RAND} = \mathrm{0xFF \dots FF}$
+    \item $\mathrm{AMF} = \mathrm{0xFFFF}$
+    \item Res Length = 16
+    \item $\mathrm{MCC} = 250$
+    \item $\mathrm{MNC} = 17$
+\end{itemize}
+
+Значение параметра $\mathrm{SQN}$ изменялось от 1 до 9.
+Параметры, зависящие от $\mathrm{SQN}$, выделены шрифтом.
+Результаты представлены в таблице~\ref{tab:xor_sqn}.
+
+\begin{table}[H]
+    \scriptsize
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{|c|c|c|Y|c|}
+        \hline
+        $\mathrm{SQN}$ & $\mathrm{MAC-A}$ & $\mathrm{RES}$ / $\mathrm{CK}$ / $\mathrm{IK}$ / $\mathrm{AK}$ & $\mathrm{AUTN}$ (${\color{sqnakcolor}\mathrm{SQN}\oplus \mathrm{AK}} \parallel {\color{amfcolor}\mathrm{AMF}} \parallel {\color{maccolor}\mathrm{MAC-A}}$) & $\mathrm{K_{ASME}}$ \\
+        \hline
+        1 & \textbf{62402C12E5CF5072} & \begin{tabular}[c]{@{}l@{}}RES: 62402C12E5CE\dots\\ CK: 402C12E5CEAF\dots\\ IK: 2C12E5CEAF8D\dots\\ AK: 12E5CEAF8D62\end{tabular} & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D63}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5CF5072}} & \textbf{1CA8C8E2F95BB97B\dots} \\
+        \hline
+        2 & \textbf{62402C12E5CC5072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D60}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5CC5072}} & \textbf{FB6B42BFA9280C1B\dots} \\
+        \hline
+        3 & \textbf{62402C12E5CD5072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D61}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5CD5072}} & \textbf{D50EF802E1440DF2\dots} \\
+        \hline
+        4 & \textbf{62402C12E5CA5072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D66}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5CA5072}} & \textbf{06E08E549B762D63\dots} \\
+        \hline
+        5 & \textbf{62402C12E5CB5072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D67}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5CB5072}} & \textbf{A7DD01012BD3AEB5\dots} \\
+        \hline
+        6 & \textbf{62402C12E5C85072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D64}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5C85072}} & \textbf{E8D1F268D8E9F3CE\dots} \\
+        \hline
+        7 & \textbf{62402C12E5C95072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D65}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5C95072}} & \textbf{6CD1187289C83198\dots} \\
+        \hline
+        8 & \textbf{62402C12E5C65072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D6A}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5C65072}} & \textbf{AB66CD1D431DB358\dots} \\
+        \hline
+        9 & \textbf{62402C12E5C75072} & --//-- & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D6B}\textcolor{amfcolor}{FFFF}\textcolor{maccolor}{62402C12E5C75072}} & \textbf{FED67A033FDDF32B\dots} \\
+        \hline
+    \end{tabularx}
+    \caption{Параметры аутентификации при изменении $\mathrm{SQN}$ $1 \dots 9$}
+    \label{tab:xor_sqn}
+\end{table}
+
+Примечание: при фиксированном значении параметра $\mathrm{RAND}$, параметры $\mathrm{RES}$, $\mathrm{CK}$, $\mathrm{IK}$ и $\mathrm{AK}$ остаются неизменными во всех 9 опытах:
+
+\begin{itemize}
+    \item $\mathrm{RES} = \mathrm{62402C12E5CEAF8D62402C12E5CEAF8D}$
+    \item $\mathrm{CK} = \mathrm{402C12E5CEAF8D62402C12E5CEAF8D62}$
+    \item $\mathrm{IK} = \mathrm{2C12E5CEAF8D62402C12E5CEAF8D6240}$
+    \item $\mathrm{AK} = \mathrm{12E5CEAF8D62}$
+\end{itemize}
+
+\subsection{Влияние параметра AMF}
+
+При постоянных $\mathrm{SQN} = 9$ и $\mathrm{RAND} = \mathrm{0xFF \dots FF}$, изменялось значение параметра $\mathrm{AMF}$.
+Параметры, зависящие от $\mathrm{AMF}$, выделены шрифтом.
+Результаты представлены в таблице~\ref{tab:xor_amf}.
+
+
+\begin{table}[H]
+    \scriptsize
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{|c|c|c|Y|c|}
+        \hline
+        $\mathrm{AMF}$ & $\mathrm{MAC-A}$ & $\mathrm{RES}$ / $\mathrm{CK}$ / $\mathrm{IK}$ / $\mathrm{AK}$ & $\mathrm{AUTN}$ (${\color{sqnakcolor}\mathrm{SQN}\oplus \mathrm{AK}} \parallel {\color{amfcolor}\mathrm{AMF}} \parallel {\color{maccolor}\mathrm{MAC}}$) & $\mathrm{K_{ASME}}$ \\
+        \hline
+        $\mathrm{0{x}0FFF}$ & \textbf{62402C12E5C7A072} & См.\ таблицу~\ref{tab:xor_sqn} & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D6B}\textcolor{amfcolor}{0FFF}\textcolor{maccolor}{62402C12E5C7A072}} & FED67A033FDDF32B\dots \\
+        \hline
+        $\mathrm{0{x}00FF}$ & \textbf{62402C12E5C7AF72} & См.\ таблицу~\ref{tab:xor_sqn} & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D6B}\textcolor{amfcolor}{00FF}\textcolor{maccolor}{62402C12E5C7AF72}} & FED67A033FDDF32B\dots \\
+        \hline
+        $\mathrm{0{x}000F}$ & \textbf{62402C12E5C7AF82} & См.\ таблицу~\ref{tab:xor_sqn} & \textbf{\textcolor{sqnakcolor}{12E5CEAF8D6B}\textcolor{amfcolor}{000F}\textcolor{maccolor}{62402C12E5C7AF82}} & FED67A033FDDF32B\dots \\
+        \hline
+    \end{tabularx}
+    \caption{Параметры аутентификации при варьировании $\mathrm{AMF}$}
+    \label{tab:xor_amf}
+\end{table}
+
+\subsection{Влияние случайного числа RAND}
+
+При постоянных $\mathrm{SQN} = 9$ и $\mathrm{AMF} = \mathrm{0{x}000F}$ значение случайного числа изменено на $\mathrm{RAND} = \mathrm{0xAA\dots AA}$.
+Результаты представлены в таблице~\ref{tab:xor_rand}, все результирующие параметры изменились.
+
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|l|X|}
+        \hline
+        Параметр & Значение \\
+        \hline
+        $\mathrm{RAND}$  & $\mathrm{AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA}$ \\ \hline
+        $\mathrm{MAC-A}$  & $\mathrm{37157947B092FAD7}$ \\ \hline
+        $\mathrm{RES}$    & $\mathrm{37157947B09BFAD837157947B09BFAD8}$ \\ \hline
+        $\mathrm{CK}$     & $\mathrm{157947B09BFAD837157947B09BFAD837}$ \\ \hline
+        $\mathrm{IK}$     & $\mathrm{7947B09BFAD837157947B09BFAD83715}$ \\ \hline
+        $\mathrm{AK}$     & $\mathrm{47B09BFAD837}$ \\ \hline
+        $\mathrm{AUTN}$   & $\mathrm{\textcolor{sqnakcolor}{47B09BFAD83E}\textcolor{amfcolor}{000F}\textcolor{maccolor}{37157947B092FAD7}}$ \\ \hline
+        $\mathrm{K_{ASME}}$ & $\mathrm{26ABB689BFF167578340B09BEDEFBB72324CF7905617DD61776C84B78CFC2FCC}$ \\
+        \hline
+    \end{tabularx}
+    \caption{Параметры аутентификации при смене значения $\mathrm{RAND}$}
+    \label{tab:xor_rand}
+\end{table}
+
