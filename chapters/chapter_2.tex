@@ -1,13 +1,31 @@
 \newpage
 \chapter{Блок-схема лабораторной установки}
 
-Лабораторный комплекс представляет собой интерактивный аппаратно-программный измерительный стенд, имитирующий физические процессы в радиоэфире сотовой сети, работу радиомодема смартфона и перехватывающего комплекса (Fake БС).
-Пример скриншота стенда приведен на рисунке~\ref{fig:screen_example}.
+Лабораторный комплекс представляет собой интерактивный аппаратно-программный измерительный стенд, имитирующий работу измерительного комплекса радиоконтроля ПЭМИ.
+
+Структурная блок-схема установки приведена на рисунке~\ref{fig:block_scheme}.
 
 \begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/пассивный}
-    \caption{Пример скриншота лабораторного стенда \code{cellular\_security\_combined\_lab.exe}}
-    \label{fig:screen_example}
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm and 1.4cm,
+    block/.style={rectangle, draw, thick, fill=gray!10, text width=3.6cm, align=center, minimum height=1.3cm, font=\small},
+    line/.style={-Latex, thick}
+]
+    \node[block] (source) {Источник ПЭМИ\\(Монитор $1920\times1080$,\\$f_{pixel}=148.5$ МГц)};
+    \node[block, right=of source] (channel) {Свободное\\пространство\\(Дистанция $R=1\dots100$ м)};
+    \node[block, right=1.8cm of channel] (ant) {Приёмная антенна\\(Штырь $2.15$ дБи /\\ЛПА $12.0$ дБи)};
+
+    \node[block, below=1.2cm of source] (demod) {Демодулятор видео\\($BW = 3\dots 100$ МГц)\\Экран 2 и Осциллограф С1-150 (Экран 4)};
+    \node[block, below=1.2cm of channel] (smv) {Селективный\\микровольтметр SMV-8.5\\($dF = 0.2\dots 200$ кГц)};
+    \node[block, below=1.2cm of ant] (sa) {Анализатор спектра\\Agilent E4402B\\(100--200 МГц, Экран 5)};
+
+    \draw[line] (source) -- node[above, font=\scriptsize]{ПЭМИ} (channel);
+    \draw[line] (channel) -- node[above, font=\scriptsize]{Затухание $L_V$} (ant);
+    \draw[line] (ant.south) -- ++(0,-0.5) -| (demod.north);
+    \draw[line] (ant.south) -- ++(0,-0.5) -| (smv.north);
+    \draw[line] (ant.south) -- (sa.north);
+\end{tikzpicture}
+\caption{Блок-схема виртуальной лабораторной установки для исследования ПЭМИ}
+\label{fig:block_scheme}
 \end{figure}

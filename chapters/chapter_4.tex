@@ -1,141 +1,318 @@
 \newpage
 \chapter{Результаты измерений в виде графиков и таблиц}
 
-\section{Пассивный радиомониторинг LTE}
+\section{Оценка влияния дистанции и типа антенны на уровень ПЭМИ}
 
-На Экране Б зафиксирован спектр полезного цифрового OFDM-сигнала легитимных станций БС №1 и БС №2 с центральными частотами канала Downlink $f_{\text{БС1 LTE}} = 2620\text{ МГц}$ и $f_{\text{БС2 LTE}} = 2670\text{ МГц}$.
-Перехваченные пассивным сканером параметры широковещательных блоков MIB и SIB1 сведены в таблицу~\ref{tab:mib_sib}.
-
-\begin{table}[H]
-    \footnotesize
-    \renewcommand{\arraystretch}{1.3}
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|c|X|}
-        \hline
-        Канал (блок) & Параметр & Значение & Техническое назначение \\ \hline
-        PBCH (MIB) & \code{dl-Bandwidth} & \code{n100 (20 MHz)} & Выделено 100 ресурсных блоков PRB \\ \hline
-        PBCH (MIB) & \code{phich-Config} & \code{normal} & Конфигурация физического канала PHICH \\ \hline
-        PBCH (MIB) & \code{SFN} & \code{412} & Системный номер кадра (System Frame Number) \\ \hline
-        PDSCH (SIB1) & \code{PLMN identity} & \code{250-01 (MTS)} & Код страны MCC=250 (РФ), оператор MNC=01 \\ \hline
-        PDSCH (SIB1) & \code{Cell Identity} & \code{0{x}4A2F11 (4861713)} & Уникальный номер соты (CI) \\ \hline
-        PDSCH (SIB1) & \code{trackingAreaCode} & \code{10442} & Код зоны местоположения абонентов (TAC) \\ \hline
-        PDSCH (SIB1) & \code{cellBarred} & \code{notBarred} & Разрешение регистрации абонентов в соте \\ \hline
-    \end{tabularx}
-    \caption{Перехваченные параметры блоков PBCH (MIB) и PDSCH (SIB1) на Экране Д}
-    \label{tab:mib_sib}
-\end{table}
-
-\section{Атака MitM и деградация в GSM}
-
-При включении Режима 1 генератор прицельной помехи подавляет 72 центральные поднесущие сигналов синхронизации PSS/SSS LTE на частотах $2630\text{ МГц}$ и $2680\text{ МГц}$ (полоса $1.08\text{ МГц}$), сбрасывая смартфон в диапазон GSM-900 (каналы $935$, $945$ и $955\text{ МГц}$).
-Сводные результаты измерений на мониторе смартфона (Экран Г) для всех режимов приведены в таблице~\ref{tab:measurements}, а перехваченные в пункте 3 персональные данные абонента --- в таблице~\ref{tab:intercept}.
+Измерения проведены на частоте $f_{pixels} = 148.50003\text{ МГц}$ при полосе ПЧ вольтметра $dF = 200\text{ кГц}$.
+Результаты для всенаправленной антенны ($\mathrm{BW} = 10\text{ МГц}$) представлены в таблице~\ref{tab:exp1_omni}, а для направленной антенны ($\mathrm{BW} = 100\text{ МГц}$) --- в таблице~\ref{tab:exp2_dir}.
 
 \begin{table}[H]
-    \footnotesize
+    \small
     \renewcommand{\arraystretch}{1.3}
     \centering
-    \begin{tabularx}{\textwidth}{|l|Y|Y|Y|Y|Y|Y|}
+    \begin{tabularx}{\textwidth}{|X|X|X|X|l|}
         \hline
-        \multirow{2}{4.6cm}{Контролируемый параметр} & \multicolumn{2}{c|}{Пункт 1 (LTE)} & \multicolumn{2}{c|}{Пункт 2 ($0\text{ дБм}$)} & \multicolumn{2}{c|}{Пункт 3 ($20\text{ дБм}$)} \\ \cline{2-7}
-         & Расчет & Стенд & Расчет & Стенд & Расчет & Стенд \\ \hline
-        Активный режим сети & LTE & 4G LTE & GSM & GSM & GSM & GSM \\ \hline
-        Тип шифрования & AES & AES & A5/3 & A5/3 & Нет & Нет \\ \hline
-        Передаваемый ID (Экран В) & S-TMSI & S-TMSI & TMSI & TMSI & IMSI & IMSI \\ \hline
-        Уровень сигнала, дБм & $-103.89$ & $-102.9$ & $-85.97$ & $-85.0$ & $-73.18$ & $-72.2$ \\ \hline
-        $\mathrm{RSRP}_{\text{БС1}}$, дБм & $-103.89$ & $-102.9$ & --- & --- & --- & --- \\ \hline
-        $\mathrm{RSRP}_{\text{БС2}}$, дБм & $-109.74$ & $-108.8$ & --- & --- & --- & --- \\ \hline
-        Критерий $C1_{\text{БС1}}$, дБ & --- & --- & $29.03$ & $30.0$ & $29.03$ & $30.0$ \\ \hline
-        Критерий $C1_{\text{БС2}}$, дБ & --- & --- & $23.21$ & $24.2$ & $23.21$ & $24.2$ \\ \hline
-        Критерий $C1_{\text{FakeБС}}$, дБ & --- & --- & $16.82$ & $17.8$ & $36.82$ & $37.8$ \\ \hline
-        Выбранная сота & БС №1 & БС №1 & БС №1 & БС №1 & Fake БС & Fake БС \\ \hline
+        $R$, м (факт.) & $P_{rx}$, дБм (спектр) & $U$, мкВ (вольтметр) & $\mathrm{SNR}$, дБ (эксп.\ / расч.) & Качество изображения \\ \hline
+        1 (1.0) & $-65.85$ & $114.02$ & $+52.15$ $(+52.15)$ & Четкое \\ \hline
+        2 (2.0) & $-77.89$ & $28.51$ & $+40.11$ $(+40.11)$ & Четкое \\ \hline
+        5 (5.0) & $-93.67$ & $4.65$ & $+24.33$ $(+24.19)$ & Среднее \\ \hline
+        10 (9.9) & $-105.69$ & $1.22$ & $+12.31$ $(+12.15)$ & Плохое (на грани) \\ \hline
+        20 (19.8) & $-113.46$ & $0.61$ & $+4.54$ $(+4.46)$ & Не видно \\ \hline
+        30 (29.7) & $-116.98$ & $0.52$ & $+1.02$ $(+0.94)$ & Не видно \\ \hline
+        50 (50.5) & $-117.77$ & $0.45$ & $\approx 0$ $(-3.50)$ & Не видно \\ \hline
+        80 (80.2) & $-118.07$ & $0.42$ & $\leqslant 0$ $(-7.58)$ & Не видно \\ \hline
+        100 (100.0) & $-118.44$ & $0.41$ & $\leqslant 0$ $(-9.52)$ & Не видно \\ \hline
     \end{tabularx}
-    \caption{Результаты измерений уровней сигнала, $\mathrm{RSRP}$ и критериев выбора соты $C1$}
-    \label{tab:measurements}
+    \caption{Зависимость уровня ПЭМИ и качества изображения от дистанции для всенаправленной антенны}
+    \label{tab:exp1_omni}
 \end{table}
 
 \begin{table}[H]
-    \footnotesize
+    \small
     \renewcommand{\arraystretch}{1.3}
     \centering
-    \begin{tabularx}{\textwidth}{|l|Y|}
+    \begin{tabularx}{\textwidth}{|X|X|X|X|l|}
         \hline
-        Параметр перехвата & Зафиксированное значение \\ \hline
-        Статус терминала при $P_{\text{Fake}} = 0\text{ дБм}$ & \code{Абонент сброшен в GSM} \code{(ПЕРЕХВАТ СОРВАН СОТОЙ ОПЕРАТОРА!)} \\ \hline
-        Статус терминала при $P_{\text{Fake}} = 20\text{ дБм}$ & \code{Абонент сброшен в GSM} \code{(КАНАЛ УТЕЧКИ АКТИВИРОВАН!)} \\ \hline
-        Перехваченный постоянный ID (\code{IMSI}) & \code{IMSI 250010123456789} \\ \hline
-        Состояние режима шифрования & \code{Выключено} (на экране смартфона: \code{[Нет]}) \\ \hline
-        Текст перехваченного СМС-сообщения & \code{«Код подтверждения: 9941»} \\ \hline
+        $R$, м (факт.) & $P_{rx}$, дБм (спектр) & $U$, мкВ (вольтметр) & $SNR$, дБ (эксп.\ / расч.) & Качество изображения \\ \hline
+        1 (1.0) & $-56.00$ & $354.39$ & $+62.00$ $(+62.00)$ & Четкое \\ \hline
+        2 (2.0) & $-67.95$ & $89.49$ & $+50.05$ $(+49.96)$ & Четкое \\ \hline
+        5 (5.0) & $-83.82$ & $14.41$ & $+34.18$ $(+34.04)$ & Четкое с небольшим шумом \\ \hline
+        10 (9.9) & $-95.84$ & $3.63$ & $+22.16$ $(+22.00)$ & Среднее, ближе к плохому \\ \hline
+        20 (19.8) & $-103.61$ & $1.53$ & $+14.39$ $(+14.31)$ & Плохое (на грани) \\ \hline
+        30 (29.7) & $-107.13$ & $1.06$ & $+10.87$ $(+10.79)$ & Не видно \\ \hline
+        50 (50.5) & $-111.56$ & $0.72$ & $+6.44$ $(+6.35)$ & Не видно \\ \hline
+        80 (80.2) & $-115.75$ & $0.54$ & $+2.25$ $(+2.27)$ & Не видно \\ \hline
+        100 (100.0) & $-117.67$ & $0.51$ & $+0.33$ $(+0.33)$ & Не видно \\ \hline
     \end{tabularx}
-    \caption{Параметры перехвата на Экране Д «Fake БС Терминал» при $P_{\text{Fake}} = 20\text{ дБм}$}
-    \label{tab:intercept}
+    \caption{Зависимость уровня ПЭМИ и качества изображения от дистанции для направленной антенны}
+    \label{tab:exp2_dir}
 \end{table}
 
-\section{Зависимость критерия $C1_{\text{FakeБС}}$ от порога $\mathrm{AccMin}$}
-
-Результаты пошагового измерения критерия $C1_{\text{FakeБС}}$ при фиксированной мощности $P_{\text{Fake}} = 20\text{ дБм}$ и изменении порога $\mathrm{AccMin}_{\text{Fake БС}}$ от $-120.0\text{ дБм}$ до $-80.0\text{ дБм}$ с шагом $5\text{ дБ}$ приведены в таблице~\ref{tab:c1_vs_accmin}, а соответствующий график построен на рисунке~\ref{fig:c1_graph}.
-
-\begin{table}[H]
-    \footnotesize
-    \renewcommand{\arraystretch}{1.3}
-    \centering
-    \begin{tabularx}{\textwidth}{|c|Y|Y|Y|Y|l|}
-        \hline
-        Шаг & $\mathrm{AccMin}_{\text{Fake БС}}$, дБм & $C1_{\text{FakeБС}}$ (стенд), дБ & $C1_{\text{FakeБС}}$ (расчет), дБ & $C1_{\text{БС1}}$ (стенд), дБ & Состояние канала утечки \\ \hline
-        1 & $-120.0$ & $47.8$ & $46.82$ & $30.0$ & Активен (привязка к Fake БС) \\ \hline
-        2 & $-115.0$ & $42.8$ & $41.82$ & $30.0$ & Активен (привязка к Fake БС) \\ \hline
-        3 & $-110.0$ & $37.8$ & $36.82$ & $30.0$ & Активен (привязка к Fake БС) \\ \hline
-        4 & $-105.0$ & $32.8$ & $31.82$ & $30.0$ & Активен (привязка к Fake БС) \\ \hline
-        5 & $-100.0$ & $27.8$ & $26.82$ & $30.0$ & Срыв атаки (возврат на БС №1) \\ \hline
-        6 & $-95.0$ & $22.8$ & $21.82$ & $30.0$ & Срыв атаки (работает БС №1) \\ \hline
-        7 & $-90.0$ & $17.8$ & $16.82$ & $30.0$ & Срыв атаки (работает БС №1) \\ \hline
-        8 & $-85.0$ & $12.8$ & $11.82$ & $30.0$ & Срыв атаки (работает БС №1) \\ \hline
-        9 & $-80.0$ & $7.8$ & $6.82$ & $30.0$ & Срыв атаки (работает БС №1) \\ \hline
-    \end{tabularx}
-    \caption{Экспериментальная зависимость $C1_{\text{FakeБС}}$ от порога $\mathrm{AccMin}_{\text{Fake БС}}$ при $P_{\text{Fake}} = 20\text{ дБм}$}
-    \label{tab:c1_vs_accmin}
-\end{table}
-
+Совмещенный график зависимости уровня сигнала $P_{rx}$ и отношения сигнал/шум $\mathrm{SNR}$ от дистанции $R$ для двух типов антенн представлен на рисунке~\ref{fig:graph_prx_snr}.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    width=\textwidth,
-    height=7.5cm,
-    xlabel={Системный порог отсечки $\mathrm{AccMin}_{\text{Fake БС}}$, дБм},
-    ylabel={Критерий выбора соты $C1$, дБ},
-    xmin=-122, xmax=-78,
-    ymin=0, ymax=53,
-    xtick={-120,-115,-110,-105,-100,-95,-90,-85,-80},
-    ytick={0,5,10,15,20,25,30,35,40,45,50},
-    grid=both,
-    grid style={line width=.1pt, draw=gray!30},
-    major grid style={line width=.2pt,draw=gray!60},
-    legend pos=north east,
-    legend style={font=\footnotesize}
-]
-    % Линия C1_FakeБС
-    \addplot[color=red, thick, mark=*, mark size=2.2pt] coordinates {
-        (-120, 47.8) (-115, 42.8) (-110, 37.8) (-105, 32.8)
-        (-100, 27.8) (-95, 22.8) (-90, 17.8) (-85, 12.8) (-80, 7.8)
-    };
-    \addlegendentry{$C1_{\text{FakeБС}}$ (при $P_{\text{Fake}}=20\text{ дБм}$)}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.72\textwidth,
+            height=7.5cm,
+            scale only axis=true,
+            clip mode=individual, % Гарантирует, что стрелки и подписи рисуются ПОВЕРХ графиков
+            xmin=0, xmax=103,
+            ymin=-128, ymax=-50,
+            xtick={1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100},
+            ytick={-128, -118, -110, -100, -90, -80, -70, -60, -50},
+            tick label style={font=\footnotesize},
+            label style={font=\small},
+            xlabel={Дистанция до монитора $R$, м},
+            ylabel={Мощность сигнала $P_{rx}$, дБм},
+            axis y line*=left,
+            axis x line*=bottom,
+            grid=both,
+            grid style={line width=.1pt, draw=gray!20},
+            major grid style={line width=.4pt, draw=gray!40},
+            minor tick num=1,
+            legend style={
+                at={(0.98,0.97)},
+                anchor=north east,
+                fill=white,
+                fill opacity=0.95,
+                draw=gray!60,
+                rounded corners=2pt,
+                font=\scriptsize,
+                cells={anchor=west}
+            }
+        ]
 
-    % Порог легитимной БС1
-    \addplot[color=blue, ultra thick, dashed] coordinates {
-        (-122, 30.0) (-78, 30.0)
-    };
-    \addlegendentry{Уровень легитимной соты $C1_{\text{БС1}} = 30.0\text{ дБ}$}
+            % 1. Закрашенная зона ниже порога шума (SNR <= 0 дБ, Prx <= -118 дБм)
+            \fill[red!8, opacity=0.6] (axis cs:0,-128) rectangle (axis cs:103,-118);
 
-    % Точка срыва атаки на шаге -100 дБм
-    \addplot[only marks, mark=o, mark size=4.5pt, draw=black, ultra thick] coordinates {(-100, 27.8)};
-    \node[anchor=north east, font=\scriptsize, fill=yellow!20, draw=black, rounded corners=2pt, inner sep=3pt] at (axis cs:-96, 21) {Шаг срыва атаки: $\mathrm{AccMin} = -100\text{ дБм}$ ($C1_{\text{FakeБС}} = 27.8 < 30.0\text{ дБ}$)};
+            % 2. Линия порога собственного теплового шума N = -118 дБм (SNR = 0 дБ)
+            \addplot[color=red!75!black, densely dashed, very thick] coordinates {(0,-118) (103,-118)};
+            \addlegendentry{Уровень шума $N = -118$ дБм ($\mathrm{SNR} = 0$ дБ)}
 
-    % Точная точка пересечения
-    \addplot[only marks, mark=diamond*, mark size=3pt, color=black] coordinates {(-102.2, 30.0)};
-    \node[anchor=south west, font=\scriptsize] at (axis cs:-102, 31) {Граница равенства ($-102.2\text{ дБм}$)};
-\end{axis}
-\end{tikzpicture}
-\caption{График зависимости критерия выбора соты $C1_{\text{FakeБС}}$ от порога $\mathrm{AccMin}_{\text{Fake БС}}$}
-\label{fig:c1_graph}
+            % 3. Экспериментальные точки: Направленная антенна
+            \addplot[
+                color=red!85!black,
+                mark=square*,
+                mark options={fill=red!85!black, scale=1.05},
+                line width=1.4pt
+            ] coordinates {
+                (1,-56.00) (2,-67.95) (5,-83.82) (9.9,-95.84) (19.8,-103.61) (29.7,-107.13) (50.5,-111.56) (80.2,-115.75) (100,-117.67)
+            };
+            \addlegendentry{Направленная ($G = 12.0$ дБи) — эксп.}
+
+            % 4. Экспериментальные точки: Всенаправленная антенна
+            \addplot[
+                color=blue!85!black,
+                mark=*,
+                mark options={fill=blue!85!black, scale=1.05},
+                line width=1.4pt
+            ] coordinates {
+                (1,-65.85) (2,-77.89) (5,-93.67) (9.9,-105.69) (19.8,-113.46) (29.7,-116.98) (50.5,-117.77) (80.2,-118.07) (100,-118.44)
+            };
+            \addlegendentry{Всенаправленная ($G = 2.15$ дБи) — эксп.}
+
+            % 5. Пунктирная ветвь теоретического затухания под шумом (для всенаправленной)
+            \addplot[
+                color=blue!60!black,
+                dotted,
+                line width=1.3pt
+            ] coordinates {
+                (29.7,-116.98) (50.5,-121.50) (80.2,-125.58) (100,-127.52)
+            };
+            \addlegendentry{Расчет под шумовой полкой ($\mathrm{SNR} < 0$ дБ)}
+
+            % --- ВЫНОСКИ И СТРЕЛКИ НА ПЕРЕДНЕМ ПЛАНЕ (с белой подложкой) ---
+
+            % Стрелка R_КЗ1 (подходит снизу к синей точке 9.9 м, не пересекая красную линию)
+            \draw[blue!85!black, very thick, -Latex] (axis cs:9.9,-114) -- (axis cs:9.9,-106.8);
+            \node[anchor=north, font=\scriptsize, text=blue!85!black, fill=white, draw=blue!40, rounded corners=1.5pt, inner sep=2pt]
+            at (axis cs:12.5,-114) {$R_{\text{КЗ1}} \approx 10\text{ м}$};
+
+            % Стрелка R_КЗ2 (подходит сверху к красной кривой на 24.8 м в свободном месте)
+            \draw[red!85!black, very thick, -Latex] (axis cs:24.8,-93) -- (axis cs:24.8,-104.5);
+            \node[anchor=south, font=\scriptsize, text=red!85!black, fill=white, draw=red!40, rounded corners=1.5pt, inner sep=2pt]
+            at (axis cs:24.8,-93) {$R_{\text{КЗ2}} \approx 25\text{ м}$};
+
+            % Двусторонняя стрелка выигрыша по усилению антенны (+9.85 дБ)
+            \draw[teal!80!black, very thick, Latex-Latex] (axis cs:60,-113.1) -- (axis cs:60,-123.0);
+            \node[anchor=west, font=\scriptsize, text=teal!70!black, fill=white, draw=teal!40, rounded corners=1.5pt, inner sep=2pt]
+            at (axis cs:61.5,-118.0) {$\Delta G = +9.85\text{ дБ}$};
+
+            % Подпись зоны шума
+            \node[anchor=west, font=\scriptsize\itshape, text=red!70!black]
+            at (axis cs:2,-124.2) {Зона подавления сигнала шумом ($\mathrm{SNR} \leqslant 0$ дБ)};
+
+        \end{axis}
+
+% Вторая (правая) ось Y для отношения сигнал/шум SNR = Prx + 118 дБ
+        \begin{axis}[
+            width=0.72\textwidth,
+        height=7.5cm,
+        scale only axis=true,
+        xmin=0, xmax=103,
+        ymin=-10, ymax=68,
+        xtick=\empty,
+        ytick={-10, 0, 8, 18, 28, 38, 48, 58, 68},
+        yticklabels={$-10$, $0$, $+8$, $+18$, $+28$, $+38$, $+48$, $+58$, $+68$},
+        tick label style={font=\footnotesize},
+        label style={font=\small},
+        ylabel={Отношение сигнал/шум $\mathrm{SNR}$, дБ},
+        axis y line*=right,
+        axis x line=none
+        ]
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Совмещенные зависимости мощности принимаемого сигнала $P_{rx}$ (левая ось) и отношения сигнал/шум $\mathrm{SNR}$ (правая ось) от дистанции $R$ для двух типов антенн}
+    \label{fig:graph_prx_snr}
 \end{figure}
+
+\section{Влияние полосы демодулятора на качество изображения}
+
+Результаты исследования влияния полосы пропускания фильтра демодулятора $\mathrm{BW}$ при $R = 10\text{ м}$ ($9.9\text{ м}$) и направленной антенне приведены в таблице~\ref{tab:exp3_bw}.
+
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|X|}
+        \hline
+        Полоса $\mathrm{BW}$, МГц & Качество изображения & Уровень шума и форма импульсов на осциллограмме \\ \hline
+        3 & Плохое, картинка смазана, края полос размыты & Минимальный, фронты прямоугольных импульсов сильно сглажены. \\ \hline
+        10 & Четкое, оптимальное, виден небольшой шум & Низкий, прямоугольная форма импульсов сохранена, малые флуктуации шума. \\ \hline
+        20 & Среднее, больше шума & Умеренный, заметные шумовые выбросы на вершинах импульсов и в паузах. \\ \hline
+        60 & Плохое, видимость значительно ухудшилась & Высокий, желтая линия сильно скачет из-за широкополосного шума. \\ \hline
+        100 & Очень плохое, едва видно & Максимальный, сильные хаотические скачки линии, импульсы тонут в шуме. \\ \hline
+    \end{tabularx}
+    \caption{Зависимость качества перехваченного изображения от полосы демодулятора}
+    \label{tab:exp3_bw}
+\end{table}
+
+\section{Влияние полосы ПЧ вольтметра на чувствительность}
+
+Результаты измерений напряжения на частоте сигнала ($148.50003\text{ МГц}$) и на свободной от сигнала частоте ($155.0\text{ МГц}$) при $R = 50\text{ м}$ ($50.5\text{ м}$) сведены в таблицу~\ref{tab:exp4_if} и отображены на графике (рисунок~\ref{fig:graph_smv_if}).
+
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{|Y|Y|Y|Y|}
+        \hline
+        Полоса ПЧ, кГц & $U(f_{pixels} = 148.5\text{ МГц})$, мкВ & $U(155\text{ МГц, шум})$, мкВ & $\Delta U$ (сигнал), мкВ \\ \hline
+        200 & $0.71$ & $0.41$ & $0.30$ \\ \hline
+        10 & $0.60$ & $0.09$ & $0.51$ \\ \hline
+        3 & $0.59$ & $0.05$ & $0.54$ \\ \hline
+        1 & $0.59$ & $0.03$ & $0.56$ \\ \hline
+        0.5 & $0.59$ & $0.02$ & $0.57$ \\ \hline
+        0.2 & $0.59$ & $0.02$ & $0.57$ \\ \hline
+    \end{tabularx}
+    \caption{Влияние полосы ПЧ вольтметра на чувствительность ($R = 50\text{ м}$, Направленная антенна)}
+    \label{tab:exp4_if}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{semilogxaxis}[
+            width=0.8\textwidth,
+        height=6.8cm,
+        scale only axis=true,
+        clip mode=individual,
+        xmin=0.15, xmax=280,
+        ymin=0, ymax=0.92,
+        xtick={0.2, 0.5, 1, 3, 10, 200},
+        xticklabels={$0.2$, $0.5$, $1$, $3$, $10$, $200$},
+        ytick={0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9},
+        tick label style={font=\footnotesize},
+        label style={font=\small},
+        xlabel={Полоса ПЧ вольтметра $dF$, кГц (логарифмическая шкала)},
+        ylabel={Напряжение на табло вольтметра $U$, мкВ},
+        grid=both,
+        grid style={line width=.1pt, draw=gray!20},
+        major grid style={line width=.4pt, draw=gray!40},
+        legend style={
+            at={(0.02,0.97)},
+            anchor=north west,
+            fill=white,
+            fill opacity=0.95,
+            draw=gray!60,
+            rounded corners=2pt,
+            font=\scriptsize,
+            cells={anchor=west}
+        }
+            ]
+
+            % 1. Закрашенная область собственного шума под синей кривой
+            \addplot[
+                fill=blue!10,
+                draw=none,
+                opacity=0.7,
+                forget plot
+            ] coordinates {
+                (0.2, 0.02) (0.5, 0.02) (1, 0.03) (3, 0.05) (10, 0.09) (200, 0.41)
+            } \closedcycle;
+
+            % 2. Суммарное напряжение на частоте сигнала 148,5 МГц (сигнал + шум)
+            \addplot[
+                color=red!85!black,
+                mark=square*,
+                mark options={fill=red!85!black, scale=1.05},
+                line width=1.4pt
+            ] coordinates {
+                (0.2, 0.59) (0.5, 0.59) (1, 0.59) (3, 0.59) (10, 0.60) (200, 0.71)
+            };
+            \addlegendentry{$U(148.5\text{ МГц})$ — смесь «сигнал + шум»}
+
+            % 3. Выделенный сигнал \Delta U
+            \addplot[
+                color=teal!80!black,
+                dashed,
+                mark=triangle*,
+                mark options={solid, fill=teal!80!black, scale=1.3},
+                line width=1.4pt
+            ] coordinates {
+                (0.2, 0.57) (0.5, 0.57) (1, 0.56) (3, 0.54) (10, 0.51) (200, 0.30)
+            };
+            \addlegendentry{$\Delta U = U(148.5) - U(155.0)$ — выделенный сигнал}
+
+            % 4. Собственный шум вольтметра на частоте 155,0 МГц
+            \addplot[
+                color=blue!85!black,
+                mark=*,
+                mark options={fill=blue!85!black, scale=1.05},
+                line width=1.4pt
+            ] coordinates {
+                (0.2, 0.02) (0.5, 0.02) (1, 0.03) (3, 0.05) (10, 0.09) (200, 0.41)
+            };
+            \addlegendentry{$U(155.0\text{ МГц})$ — собственный шум вольтметра}
+
+            % --- ВЫНОСКИ И СТРЕЛКИ НА ПЕРЕДНЕМ ПЛАНЕ ---
+
+            % Стрелка большой разности \Delta U при узкой полосе (dF = 0.5 кГц)
+            \draw[teal!80!black, very thick, Latex-Latex] (axis cs:0.5, 0.03) -- (axis cs:0.5, 0.58);
+            \node[anchor=west, font=\scriptsize, text=teal!75!black, fill=white, draw=teal!40, rounded corners=1.5pt, inner sep=2pt]
+            at (axis cs:0.58, 0.30) {$\Delta U = 0.57\text{ мкВ}$ (высокая чувствительность)};
+
+            % Стрелка малой разности \Delta U при широкой полосе (dF = 200 кГц)
+            \draw[red!80!black, very thick, Latex-Latex] (axis cs:200, 0.42) -- (axis cs:200, 0.70);
+            \node[anchor=east, font=\scriptsize, text=red!80!black, fill=white, draw=red!40, rounded corners=1.5pt, inner sep=2pt]
+            at (axis cs:165, 0.56) {$\Delta U = 0.30\text{ мкВ}$};
+
+            % Подпись роста шума
+            \node[anchor=south east, font=\scriptsize\itshape, text=blue!80!black]
+            at (axis cs:185, 0.04) {Рост теплового шума $\sim \sqrt{dF}$};
+
+        \end{semilogxaxis}
+    \end{tikzpicture}
+    \caption{Зависимость измеренного напряжения вольтметра SMV-8.5 от полосы пропускания ПЧ при $R = 50\text{ м}$}
+    \label{fig:graph_smv_if}
+\end{figure}
+
+\section{Определение контролируемой зоны}
+
+При оптимальной полосе демодулятора $\mathrm{BW} = 10\text{ МГц}$ и полосе ПЧ $dF = 0.2\text{ кГц}$ экспериментально определены предельные расстояния $R_{\text{КЗ}}$, на которых перехваченное изображение перестает распознаваться на Экране 2:
+\begin{itemize}
+    \item Для всенаправленной антенны: $R_{\text{КЗ эксп 1}} = 9.9\text{ м} \approx 10\text{ м}$.
+    \item Для направленной антенны: $R_{\text{КЗ эксп 2}} = 23.8 \dots 24.8\text{ м} \approx 25\text{ м}$.
+\end{itemize}

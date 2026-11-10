@@ -1,167 +1,180 @@
 \newpage
 \chapter{Расчеты домашнего задания}\label{ch:homework}
 
-\section{Расчет расстояний и вспомогательных коэффициентов}
+\section{Расчет уровня собственного теплового шума приемника}
 
-Расстояние от смартфона до базовых станций определяется по формуле Евклидовой метрики:
+Уровень собственного теплового шума $N$ приемника в полосе пропускания $\mathrm{BW} = 100\text{ кГц} = 10^5\text{ Гц}$ при коэффициенте шума $\mathrm{NF} = 6\text{ дБ}$ определяется выражением:
 \begin{equation}
-    d = \sqrt{(X_{\text{см}} - X_{\text{БС}})^2 + (Y_{\text{см}} - Y_{\text{БС}})^2}.
-    \label{eq:distance}
+    N = -174 + 10 \cdot \lg(\mathrm{BW}) + \mathrm{NF}
+    \label{eq:noise_level}
+\end{equation}
+Подставляя численные значения, получим:
+\begin{equation*}
+    N = -174 + 10 \cdot \lg(10^5) + 6 = -174 + 50 + 6 = -118.0\text{ дБм}.
+\end{equation*}
+
+\section{Расчет затухания ПЭМИ на трассе распространения}
+Для частоты излучения $f = 148.5\text{ МГц}$ (диапазон $47.75\text{ МГц} < f \leqslant 1800\text{ МГц}$) коэффициент затухания $L_V$ (в разах по напряжению) рассчитывается по формуле:
+\begin{equation}
+    L_V \approx
+    \begin{cases}
+        R^2, & \text{если } R \leqslant \dfrac{1800}{f}; \\[14pt]
+        \dfrac{1800 \cdot R}{f}, & \text{если } R > \dfrac{1800}{f}.
+    \end{cases}
+    \label{eq:attenuation_coefficient}
 \end{equation}
 
-Подставляя численные значения координат, находим расстояния до БС №1 ($d_1$), БС №2 ($d_2$) и ложной БС ($d_{\text{Fake}}$):
-\begin{align*}
-    d_1 &= \sqrt{(390 - 200)^2 + (290 - 380)^2} = \sqrt{190^2 + (-90)^2} \\
-        &= \sqrt{36100 + 8100} = \sqrt{44200} \approx 210.24\text{ м} = 0.21024\text{ км},
-\end{align*}
-\begin{align*}
-    d_2 &= \sqrt{(390 - 850)^2 + (290 - 420)^2} = \sqrt{(-460)^2 + (-130)^2} \\
-        &= \sqrt{211600 + 16900} = \sqrt{228500} \approx 478.02\text{ м} = 0.47802\text{ км},
-\end{align*}
-\begin{align*}
-    d_{\text{Fake}} &= \sqrt{(390 - 480)^2 + (290 - 240)^2} = \sqrt{(-90)^2 + (50)^2} \\
-                    &= \sqrt{8100 + 2500} = \sqrt{10600} \approx 102.96\text{ м} = 0.10296\text{ км}.
-\end{align*}
-
-Функция коррекции высоты мобильной станции для средних и крупных городов рассчитывается по формуле:
+Определим граничное расстояние перехода между зонами затухания:
 \begin{equation}
-    a(h_{\text{см}}) = 3.2\log_{10}(11.75 \cdot h_{\text{см}}) - 4.97.
-    \label{eq:height_correction}
-\end{equation}
-Подставляя $h_{\text{см}} = 1.5$ м, получаем:
-\begin{align*}
-    a(1.5) &= 3.2\log_{10}(11.75 \cdot 1.5) - 4.97 = 3.2\log_{10}(17.625) - 4.97 \\
-           &\approx 3.2 \cdot 1.24613 - 4.97 = -0.982384 \approx -0.9824\text{ дБ}.
-    \label{eq:height_correction_value}
-\end{align*}
-
-Коэффициент наклона трассы спада мощности определяется выражением:
-\begin{equation}
-    n_{\text{slope}} = 44.9 - 6.55\log_{10}(h_{\text{БС}}).
-    \label{eq:slope_coefficient}
-\end{equation}
-При высоте подвеса антенны базовой станции $h_{\text{БС}} = 30\text{ м}$:
-\begin{equation*}
-    n_{\text{slope}} = 44.9 - 6.55\log_{10}(30) \approx 44.9 - 6.55 \cdot 1.47712 \approx 35.225\text{ дБ/дек}.
-\end{equation*}
-
-\section{Расчет уровней пилот-сигналов RSRP в режиме LTE}
-
-Потери радиосигнала на эталонном расстоянии 1 км по модели COST 231 Hata:
-\begin{equation}
-    L_{1\text{км}} = 46.3 + 33.9\log_{10}(f) - 13.82\log_{10}(h_{\text{БС}}) - a(h_{\text{см}}) + C_m.
-    \label{eq:loss_1km}
+    r_{\text{гр}} = \frac{1800}{f} = \frac{1800}{148.5} = 12.12\text{ м}.
+    \label{eq:boundary_distance}
 \end{equation}
 
-Полные трассовые потери радиосигнала в городской застройке на расстоянии $d_{\text{км}}$:
+Перевод коэффициента затухания в децибелы осуществляется по формуле:
 \begin{equation}
-    L_{\text{TR}} = L_{1\text{км}} + n_{\text{slope}}\log_{10}(d_{\text{км}}).
-    \label{eq:total_loss}
+    L_V\text{ [дБ]} = 20 \cdot \lg(L_V).
+    \label{eq:attenuation_coefficient_db}
 \end{equation}
 
-Уровень принимаемого пилот-сигнала $\mathrm{RSRP}$ на антенном входе смартфона:
+Выполним расчет для заданных дистанций.
+При $R = 1\text{ м}$:
+\begin{equation*}
+    L_V(1) = 1^2 = 1\text{ раз} \Rightarrow L_V\text{ [дБ]} = 20\lg(1) = 0.00\text{ дБ}.
+\end{equation*}
+
+При $R = 2\text{ м}$:
+\begin{equation*}
+    L_V(2) = 2^2 = 4\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(4) = 12.04\text{ дБ}.
+\end{equation*}
+
+При $R = 5\text{ м}$:
+\begin{equation*}
+    L_V(5) = 5^2 = 25\text{ раз} \Rightarrow L_V\text{ [дБ]} = 20\lg(25) = 27.96\text{ дБ}.
+\end{equation*}
+
+При $R = 10\text{ м}$:
+\begin{equation*}
+    L_V(10) = 10^2 = 100\text{ раз} \Rightarrow L_V\text{ [дБ]} = 20\lg(100) = 40.00\text{ дБ}.
+\end{equation*}
+
+При $R = 20\text{ м}$:
+\begin{equation*}
+    L_V(20) = \dfrac{1800 \cdot 20}{148.5} = 242.42\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(242.42) = 47.69\text{ дБ}.
+\end{equation*}
+
+При $R = 30\text{ м}$:
+\begin{equation*}
+    L_V(30) = \dfrac{1800 \cdot 30}{148.5} = 363.64\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(363.64) = 51.21\text{ дБ}.
+\end{equation*}
+
+При $R = 50\text{ м}$:
+\begin{equation*}
+    L_V(50) = \dfrac{1800 \cdot 50}{148.5} = 606.06\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(606.06) = 55.65\text{ дБ}.
+\end{equation*}
+
+При $R = 80\text{ м}$:
+\begin{equation*}
+    L_V(80) = \dfrac{1800 \cdot 80}{148.5} = 969.70\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(969.70) = 59.73\text{ дБ}.
+\end{equation*}
+
+При $R = 100\text{ м}$:
+\begin{equation*}
+    L_V(100) = \dfrac{1800 \cdot 100}{148.5} = 1212.12\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(1212.12) = 61.67\text{ дБ}.
+\end{equation*}
+
+\section{Расчет мощности сигнала на входе приемника и отношения сигнал/шум}
+
+Мощность сигнала $P_{rx}$ на входе приемника и отношение сигнал/шум $\mathrm{SNR}$ определяются выражениями:
 \begin{equation}
-    \mathrm{RSRP} = P_{\text{TX}} - L_{\text{TR}}.
-    \label{eq:rsrp}
+    P_{rx} = P_{tx} + G_{rx} - L_V\text{ [дБ]},
+    \label{eq:received_power}
+\end{equation}
+\begin{equation}
+    \mathrm{SNR} = P_{rx} - N.
+    \label{eq:SNR}
 \end{equation}
 
-Выполним расчет для БС №1 LTE с данными из таблицы~\ref{tab:input_data}: $f_{\text{БС1 LTE}} = 2620\text{ МГц}$, $P_{\text{TX1}} = 18\text{ дБм}$, $d_1 = 0.21024\text{ км}$:
-\begin{align*}
-    L_{1\text{км (БС1 LTE)}} &= 46.3 + 33.9\log_{10}(2620) - 13.82\log_{10}(30) - (-0.9824) + 3.0 \\
-                             &\approx 145.75\text{ дБ},
-\end{align*}
+Пример расчета для дистанции $R = 2\text{ м}$ ($L_V = 12.04\text{ дБ}$):
+
+Всенаправленная антенна ($G_{rx1} = 2.15\text{ дБи}$):
 \begin{equation*}
-    L_{\text{TR (БС1 LTE)}} = 145.75 + 35.225\log_{10}(0.21024) \approx 145.75 - 23.86 = 121.89\text{ дБ},
+    P_{rx1}(2) = -68.0 + 2.15 - 12.04 = -77.89\text{ дБм},
 \end{equation*}
 \begin{equation*}
-    \mathrm{RSRP}_{\text{БС1}} = 18 - 121.89 = -103.89\text{ дБм}.
+    \mathrm{SNR}_1(2) = -77.89 - (-118.0) = +40.11\text{ дБ}.
 \end{equation*}
 
-Выполним расчет для БС №2 LTE с данными: $f_{\text{БС2 LTE}} = 2670\text{ МГц}$, $P_{\text{TX2}} = 25\text{ дБм}$, $d_2 = 0.47802\text{ км}$:
-\begin{align*}
-    L_{1\text{км (БС2 LTE)}} &= 46.3 + 33.9\log_{10}(2670) - 13.82\log_{10}(30) - (-0.9824) + 3.0 \\
-                             &\approx 146.03\text{ дБ},
-\end{align*}
+Направленная антенна ($G_{rx2} = 12.0\text{ дБи}$):
 \begin{equation*}
-    L_{\text{TR (БС2 LTE)}} = 146.03 + 35.225\log_{10}(0.47802) \approx 146.03 - 11.29 = 134.74\text{ дБ},
+    P_{rx2}(2) = -68.0 + 12.0 - 12.04 = -68.04\text{ дБм},
 \end{equation*}
 \begin{equation*}
-    \mathrm{RSRP}_{\text{БС2}} = 25 - 134.74 = -109.74\text{ дБм}.
+    \mathrm{SNR}_2(2) = -68.04 - (-118.0) = +49.96\text{ дБ}.
 \end{equation*}
 
-\section{Расчет уровня сигнала $\mathrm{RxLev}$ и критериев C1 в режиме GSM}
+Результаты расчетов для всех дистанций сведены в таблицу~\ref{tab:homework_results}.
 
-Для диапазона GSM-900 применяется модель Окамура-Хата, в которой потери на расстоянии 1 км определяются уравнением:
+\begin{table}[H]
+    \footnotesize
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{|c|Y|Y|Y|Y|Y|Y|}
+        \hline
+        \multirow{2}{*}{$R$, м} & \multirow{2}{*}{$L_V$, раз} & \multirow{2}{*}{$L_V$, дБ} & \multicolumn{2}{c|}{Всенаправленная ($G = 2.15$ дБи)} & \multicolumn{2}{c|}{Направленная ($G = 12.0$ дБи)} \\ \cline{4-7}
+         & & & $P_{rx1}$, дБм & $\mathrm{SNR}_1$, дБ & $P_{rx2}$, дБм & $\mathrm{SNR}_2$, дБ \\ \hline
+        1 & 1.00 & 0.00 & $-65.85$ & $+52.15$ & $-56.00$ & $+62.00$ \\ \hline
+        2 & 4.00 & 12.04 & $-77.89$ & $+40.11$ & $-68.04$ & $+49.96$ \\ \hline
+        5 & 25.00 & 27.96 & $-93.81$ & $+24.19$ & $-83.96$ & $+34.04$ \\ \hline
+        10 & 100.00 & 40.00 & $-105.85$ & $+12.15$ & $-96.00$ & $+22.00$ \\ \hline
+        20 & 242.42 & 47.69 & $-113.54$ & $+4.46$ & $-103.69$ & $+14.31$ \\ \hline
+        30 & 363.64 & 51.21 & $-117.06$ & $+0.94$ & $-107.21$ & $+10.79$ \\ \hline
+        50 & 606.06 & 55.65 & $-121.50$ & $-3.50$ & $-111.65$ & $+6.35$ \\ \hline
+        80 & 969.70 & 59.73 & $-125.58$ & $-7.58$ & $-115.73$ & $+2.27$ \\ \hline
+        100 & 1212.12 & 61.67 & $-127.52$ & $-9.52$ & $-117.67$ & $+0.33$ \\ \hline
+    \end{tabularx}
+    \caption{Результаты теоретического расчета параметров канала утечки ПЭМИ}
+    \label{tab:homework_results}
+\end{table}
+
+Определим максимальную расчетную дальность обнаружения сигнала из условия $\mathrm{SNR} = 0\text{ дБ}$ (предельное затухание $L_{V\max} = P_{tx} + G_{rx} - N$):
+
+Для всенаправленной антенны: $L_{V\max1} = -68 + 2.15 - (-118) = 52.15\text{ дБ}$ ($405.0\text{ раз}$), откуда:
+\begin{equation*}
+    R_{\max1} = \frac{L_{V\max1} \cdot f}{1800} = \frac{405.0 \cdot 148.5}{1800} = 33.4\text{ м}.
+\end{equation*}
+
+Для направленной антенны: $L_{V\max2} = -68 + 12.0 - (-118) = 62.00\text{ дБ}$ ($1258.9\text{ раза}$), откуда:
+\begin{equation*}
+    R_{\max2} = \frac{L_{V\max2} \cdot f}{1800} = \frac{1258.9 \cdot 148.5}{1800} = 103.9\text{ м}.
+\end{equation*}
+
+Получается, что замена всенаправленной антенны на направленную дает выигрыш по мощности $\Delta G = 12.0 - 2.15 = 9.85\text{ дБ}$ и увеличивает расчетную дальность перехвата в дальней зоне в $10^{9.85/20} = 3.11\text{ раза}$.
+
+\section{Расчет снижения уровня шума при сужении полосы ПЧ вольтметра}
+
+При сужении полосы ПЧ селективного микровольтметра с $\Delta f_1 = 200\text{ кГц}$ до $\Delta f_2 = 0.2\text{ кГц}$ мощность шума снижается пропорционально отношению полос, а действующее напряжение шума $U_{\text{ш}}$ на табло вольтметра — пропорционально квадратному корню из отношения полос:
 \begin{equation}
-    L_{1\text{км}} = 69.55 + 26.16\log_{10}(f) - 13.82\log_{10}(h_{\text{БС}}) - a(h_{\text{см}}).
-    \label{eq:loss_1km_gsm}
+    K_U = \sqrt{\frac{\Delta f_1}{\Delta f_2}} = \sqrt{\frac{200\text{ кГц}}{0.2\text{ кГц}}} = \sqrt{1000} = 31.62\text{ раза}.
+    \label{eq:noise_reduction_factor}
 \end{equation}
 
-Уровень принимаемого сигнала $\mathrm{RxLev}$ и критерий выбора соты $C1$ рассчитывается по формулам:
-\begin{align}
-    \mathrm{RxLev} &= P_{\text{TX}} - L_{\text{TR}}, \label{eq:rxlev} \\
-    C1 &= \mathrm{RxLev} - \mathrm{AccMin}. \label{eq:c1}
-\end{align}
+\section{Расчет параметров структуры полного видеосигнала $\mathbf{1920 \times 1080}$ ($\mathbf{60}\text{ Гц}$)}
 
-Выполним расчет для БС №1 GSM с данными: $f_{\text{БС1 GSM}} = 935\text{ МГц}$, $P_{\text{TX1}} = 18\text{ дБм}$, $\mathrm{AccMin} = -115.0\text{ дБм}$:
-\begin{align*}
-    L_{1\text{км (БС1 GSM)}} &= 69.55 + 26.16\log_{10}(935) - 13.82\log_{10}(30) - (-0.9824) \\
-                             &\approx 127.83\text{ дБ},
-\end{align*}
-\begin{equation*}
-    L_{\text{TR (БС1 GSM)}} = 127.83 + 35.225\log_{10}(0.21024) \approx 127.83 - 23.86 = 103.97\text{ дБ},
-\end{equation*}
-\begin{equation*}
-    \mathrm{RxLev}_{\text{БС1}} = 18 - 103.97 = -85.97\text{ дБм},
-\end{equation*}
-\begin{equation*}
-    C1_{\text{БС1}} = -85.97 - (-115.0) = 29.03\text{ дБ}.
-\end{equation*}
-
-Выполним расчет для БС №2 GSM с данными: $f_{\text{БС2 GSM}} = 955\text{ МГц}$, $P_{\text{TX2}} = 25\text{ дБм}$, $\mathrm{AccMin} = -115.0\text{ дБм}$:
-\begin{align*}
-    L_{1\text{км (БС2 GSM)}} &= 69.55 + 26.16\log_{10}(955) - 13.82\log_{10}(30) - (-0.9824) \\
-                             &\approx 128.08\text{ дБ},
-\end{align*}
-\begin{equation*}
-    L_{\text{TR (БС2 GSM)}} = 128.08 + 35.225\log_{10}(0.47802) \approx 128.08 - 11.29 = 116.79\text{ дБ},
-\end{equation*}
-\begin{equation*}
-    \mathrm{RxLev}_{\text{БС2}} = 25 - 116.79 = -91.79\text{ дБм},
-\end{equation*}
-\begin{equation*}
-    C1_{\text{БС2}} = -91.79 - (-115.0) = 23.21\text{ дБ}.
-\end{equation*}
-
-\section{Расчет мощности ложной БС и максимального расстояния перехвата}
-
-Рассчитаем трассовые потери для сигнала Fake БС с данными: $f_{\text{Fake GSM}} = 945\text{ МГц}$, $d_{\text{Fake}} = 0.10296\text{ км}$:
-\begin{align*}
-    L_{1\text{км (Fake)}} &= 69.55 + 26.16\log_{10}(945) - 13.82\log_{10}(30) - (-0.9824) \approx 127.96\text{ дБ}, \\
-    L_{\text{TR (Fake)}} &= 127.96 + 35.225\log_{10}(0.10296) \approx 127.96 - 34.78 = 93.18\text{ дБ}.
-\end{align*}
-
-Для перехвата трафика критерий выбора ложной соты должен превышать максимальный критерий легитимной сети:
+Количество активных строк в кадре: $N_{\text{акт}} = h = 1080\text{ строк}$.
+Общее количество строк в кадре (активные + служебные):
 \begin{equation}
-    P_{\text{Fake}} > C1_{\text{БС1}} + L_{\text{TR (Fake)}} + \mathrm{AccMin}_{\text{Fake БС}}.
-    \label{eq:fake_power}
+    N_{\text{полн}} = h + V_{porch} = 1080 + 45 = 1125\text{ строк}.
+    \label{eq:total_lines}
 \end{equation}
-При $\mathrm{AccMin_{\text{Fake БС}}} = -100.0\text{ дБм}$, получаем:
-\begin{equation*}
-    P_{\text{Fake}} > 29.03 + 93.18 + (-100.0) = 22.21\text{ дБм}.
-\end{equation*}
 
-Максимальное расстояние до ложной БС при конспиративной мощности $P_{\text{Fake}} = P_{\text{TX1}} = 18\text{ дБм}$ определяется из уравнения:
+Длительность строчного гасящего интервала во времени:
 \begin{equation}
-    d_{\max} \approx 10^{\dfrac{P_{\text{Fake}} - \mathrm{RxLev}_{\text{БС1}} - L_{1\text{км (Fake)}}}{n_{\text{slope}}}}.
-    \label{eq:max_distance}
+    t_{H\_porch} = \frac{H_{porch}}{f_{pixel}} = \frac{280}{148.5 \cdot 10^6\text{ Гц}} = 1.89 \cdot 10^{-6}\text{ с} = 1.89\text{ мкс}.
+    \label{eq:horizontal_porch}
 \end{equation}
-\begin{equation*}
-    d_{\max} \approx 10^{\frac{18 - (-85.97) - 127.96}{35.225}} \approx 10^{-0.68105} \approx 0.2084\text{ км} = 208.4\text{ м}.
-\end{equation*}
 
-С учетом заданного порога $\mathrm{AccMin}_{\text{Fake БС}} = -100.0\text{ дБм}$, требуемый уровень сигнала от ложной БС для достижения $C1_{\text{Fake}} = C1_{\text{БС1}} = 29.03\text{ дБ}$ составляет $\mathrm{RxLev}_{\text{Fake треб}} = C1_{\text{БС1}} + \mathrm{AccMin}_{\text{Fake БС}} = 29.03 + (-100.0) = -70.97\text{ дБм}$.
-Тогда при мощности $P_{\text{Fake}} = 18\text{ дБм}$, максимальное расстояние перехвата равно:
-\begin{equation*}
-    d_{\max (-100\text{ дБм})} \approx 10^{\frac{18 - (-70.97) - 127.96}{35.225}} \approx 10^{-1.10688} \approx 0.07818\text{ км} = 78.18\text{ м}.
-\end{equation*}
+Длительность кадрового гасящего интервала во времени:
+\begin{equation}
+    t_{V\_porch} = \frac{V_{porch}}{f_H} = \frac{45}{67.5 \cdot 10^3\text{ Гц}} = 0.667 \cdot 10^{-3}\text{ с} = 0.667\text{ мс}.
+    \label{eq:vertical_porch}
+\end{equation}
