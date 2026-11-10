@@ -1,19 +1,13 @@
 \newpage
-\chapter{Приведение скриншотов}
+\chapter{Приведение скриншотов и листинг команд}
 
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/ssms}
-    \caption{Панель входа в SQL Server Management Studio}
-    \label{fig:ssms}
-\end{figure}
+\section{Заполнение базы данных и проверка выборки}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
     \includegraphics[width=0.8\textwidth]{images/listing1}
-    \caption{Листинг команд создания базы данных (часть 1)}
+    \caption{Листинг SQL-команд заполнения базы данных кортежами (часть 1)}
     \label{fig:listing1}
 \end{figure}
 
@@ -21,14 +15,125 @@
     \centering
     % Замените на имя вашего файла с графиком
     \includegraphics[width=0.8\textwidth]{images/listing2}
-    \caption{Листинг команд создания базы данных (часть 2)}
+    \caption{Листинг SQL-команд заполнения базы данных кортежами (часть 2)}
     \label{fig:listing2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/diagram}
-    \caption{Физическая реляционная схема базы данных в SSMS}
-    \label{fig:diagram}
+    \includegraphics[width=1.0\textwidth]{images/insert_check}
+    \caption{Подтверждение заполнения отношений базы данных тестовыми кортежами}
+    \label{fig:insert_check}
+\end{figure}
+
+\section{Подготовка к экспорту, закрытие соединений и проверка целостности}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/listing3}
+    \caption{Листинг SQL-команд подготовки к экспорту, закрытия соединений и проверки целостности базы данных}
+    \label{fig:listing3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/pre_export_check}
+    \caption{Результат установки администратора, закрытия соединений и проверки целостности перед экспортом}
+    \label{fig:pre_export_check}
+\end{figure}
+
+\section{Экспорт данных в виде скрипта и через утилиту bcp}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/script_generating}
+    \caption{Создание скрипта \code{export\_data.sql} в среде SSMS}
+    \label{fig:script_generating}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/bcp_export}
+    \caption{Выгрузка данных в пользовательский документ \code{books\_export.txt} с помощью утилиты \code{bcp}}
+    \label{fig:bcp_export}
+\end{figure}
+
+\begin{table}[H]
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \begin{tabularx}{\textwidth}{c c X c c r r r}
+        1 & 1 & Безопасность баз данных на практике  & 978-5-00000-001-1 & 2025 & 420 & 3000 & 1250.00 \\
+        2 & 2 & Архитектура современных СУБД        & 978-5-00000-002-8 & 2025 & 350 & 2000 & 980.00  \\
+        3 & 3 & Криптографическая защита информации & 978-5-00000-003-5 & 2026 & 512 & 5000 & 1600.00 \\
+        4 & 4 & Сетевые протоколы и администрирование & 978-5-00000-004-2 & 2026 & 280 & 1500 & 850.00  \\
+        5 & 3 & Аудит информационной безопасности  & 978-5-00000-005-9 & 2026 & 390 & 2500 & 1100.00 \\
+    \end{tabularx}
+    \caption{Фрагмент экспортированных данных из текстового документа \code{books\_export.txt}}
+    \label{tab:books_export}
+\end{table}
+
+\section{Подготовка и выполнение импорта данных}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/listing4}
+    \caption{Листинг SQL-команд подготовки к импорту данных из документов пользователя в базу данных}
+    \label{fig:listing4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/script_import}
+    \caption{Выполнение импорта данных из документов пользователя в базу}
+    \label{fig:script_import}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/import_integrity_check}
+    \caption{Результат контрольной выборки данных и проверки целостности БД после завершения импорта}
+    \label{fig:import_integrity_check}
+\end{figure}
+
+\section{Скрипт и настройка автоматизации обслуживания базы данных}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/listing5}
+    \caption{Листинг SQL-команд скрипта автоматизированного обслуживания базы данных и создания резервной копии}
+    \label{fig:listing5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/auto_maintenance}
+    \caption{Результат выполнения скрипта автоматизированного обслуживания и создания резервной копии}
+    \label{fig:auto_maintenance}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/task_schedule_daily}
+    \caption{Настройка ежедневного расписания выполнения автоматических операций}
+    \label{fig:task_schedule_daily}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1.0\textwidth]{images/task_schedule_action}
+    \caption{Настройка действия запуска скрипта обслуживания в планировщике задач}
+    \label{fig:task_schedule_action}
 \end{figure}
