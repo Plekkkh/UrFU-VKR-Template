@@ -1,4 +1,141 @@
 \newpage
-\centeredheading{ПРИЛОЖЕНИЕ А}
-\refstepcounter{chapter}
+\par\medskip
+\phantomsection
+\makeatletter
+\def\@currentlabel{А}
+\makeatother
+\label{app:a}
+\begin{flushright}
+    \normalfont\bfseries\normalsize ПРИЛОЖЕНИЕ А
+\end{flushright}
+\par\medskip
 \addcontentsline{toc}{chapter}{ПРИЛОЖЕНИЕ А}
+
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{А.\arabic{figure}}
+
+\begin{figure}[H]
+    \centering
+    \rotatebox{90}{%
+        \resizebox{0.85\textheight}{!}{%
+            \begin{tikzpicture}[
+                font=\sffamily\footnotesize,
+                node distance=0.75cm and 1.2cm,
+                box/.style={
+                    draw=black!75, rounded corners=3pt, fill=white,
+                    minimum width=4.5cm, minimum height=1.1cm,
+                    align=center, inner sep=5pt, thick
+                },
+                ephemeral/.style={
+                    draw=blue!65!black, dashed, rounded corners=3pt, fill=blue!4,
+                    minimum width=4.4cm, minimum height=0.95cm,
+                    align=center, inner sep=4pt, thick
+                },
+                zone/.style={
+                    draw=black!50, dashed, rounded corners=6pt, inner sep=12pt, thick
+                },
+                arrow/.style={-{Stealth[length=2.5mm]}, thick, draw=black!80},
+                manual/.style={-{Stealth[length=2.5mm]}, thick, dashed, draw=purple!80!black},
+                bidir/.style={{Stealth[length=2.5mm]}-{Stealth[length=2.5mm]}, thick, draw=black!80}
+            ]
+
+% --- ЗОНА 1: Облачный контур GitLab SaaS ---
+                \node[box, fill=orange!8] (code_repo) {
+                    \textbf{Репозиторий кода ПО}\\
+                    \texttt{security-pipeline-lab}\\
+                    (защищенная ветка \texttt{main})
+                };
+
+                \node[box, fill=orange!8, below=0.6cm of code_repo] (ci_repo) {
+                    \textbf{Приватный репозиторий CI}\\
+                    Изолированный \texttt{.gitlab-ci.yml}\\
+                    (стадия \texttt{security-scan})
+                };
+
+                \node[box, fill=orange!15, below=0.6cm of ci_repo] (gitlab_ctrl) {
+                    \textbf{Оркестратор GitLab CI/CD}\\
+                    Правила \texttt{workflow: rules}\\
+                    (\texttt{main} и \texttt{schedule})
+                };
+
+                \node[box, fill=orange!8, below=0.6cm of gitlab_ctrl] (artifacts) {
+                    \textbf{Защищенные артефакты CI}\\
+                    Отчеты JSON / XML / HTML / TXT\\
+                    (\texttt{access: maintainer}, \texttt{1 week})
+                };
+
+                \begin{scope}[on background layer]
+                    \node[zone, fill=orange!3, fit=(code_repo) (ci_repo) (gitlab_ctrl) (artifacts),
+                        label={[font=\sffamily\bfseries\small, align=center]above:Облачный контур GitLab SaaS (\texttt{gitlab.com})}] (cloud_zone) {};
+                \end{scope}
+
+% --- ЗОНА 2: Локальный контур Организации ---
+                \node[box, fill=green!10, right=4.5cm of gitlab_ctrl] (runner) {
+                    \textbf{Локальный GitLab Runner}\\
+                    \texttt{Protected}, \texttt{Docker executor}, \texttt{concurrent=3}\\
+                    (\texttt{/var/run/docker.sock} изолирован)
+                };
+
+                \node[ephemeral, above=1.25cm of runner] (jobs_static) {
+                    \textbf{Одноразовые контейнеры SAST / SCA}\\
+                    \texttt{sast-semgrep} (\texttt{1.185.0})\\
+                    \texttt{sca-trivy} (\texttt{0.76.2})
+                };
+
+                \node[ephemeral, below=0.6cm of runner] (jobs_dast) {
+                    \textbf{Одноразовые контейнеры DAST}\\
+                    \texttt{dast-zap-unauth}, \texttt{dast-zap-auth}\\
+                    (\texttt{zaproxy/zap-stable@sha256})
+                };
+
+                \node[box, fill=gray!12, right=2.5cm of jobs_dast] (app_stand) {
+                    \textbf{Изолированный стенд ПО}\\
+                    «Easy!Appointments»\\
+                    (\texttt{http://172.17.0.1})
+                };
+
+                \node[box, fill=purple!10, below=0.75cm of jobs_dast] (defectdojo) {
+                    \textbf{OWASP DefectDojo}\\
+                    Ручной импорт отчетов,\\
+                    дедупликация и триаж
+                };
+
+                \begin{scope}[on background layer]
+                    \node[zone, fill=green!3, fit=(runner) (jobs_static) (jobs_dast) (app_stand) (defectdojo),
+                        label={[font=\sffamily\bfseries\small, align=center]above:Локальный защищенный контур Организации}] (local_zone) {};
+                \end{scope}
+
+% --- СВЯЗИ И ПОТОКИ ДАННЫХ ---
+                \draw[arrow] (code_repo) -- (ci_repo) node[midway, right, font=\scriptsize] {триггер \texttt{main}};
+                \draw[arrow] (ci_repo) -- (gitlab_ctrl) node[midway, right, font=\scriptsize] {внешний путь CI};
+
+% Связь Runner <-> GitLab SaaS
+                \draw[bidir, blue!70!black, very thick] (runner.west) -- (gitlab_ctrl.east)
+                node[midway, above, align=center, font=\scriptsize\bfseries] {HTTPS / TLS (порт 443)}
+                node[midway, below, align=center, font=\scriptsize] {очередь, код (\texttt{GIT\_DEPTH=1})};
+
+% Выгрузка артефактов в GitLab SaaS
+                \draw[arrow, blue!70!black] (runner.south west) -- (artifacts.east)
+                node[midway, above, sloped, font=\scriptsize] {выгрузка артефактов (TLS)};
+
+% Ручная передача артефактов специалистом ИБ в DefectDojo
+                \draw[manual] (artifacts.south) |- (defectdojo.west)
+                node[pos=0.72, above, font=\scriptsize\bfseries, text=purple!80!black] {ручная выгрузка и импорт}
+                node[pos=0.72, below, font=\scriptsize, text=purple!80!black] {(специалист ИБ / \texttt{Maintainer})};
+
+% Запуск контейнеров через Docker executor
+                \draw[arrow] (runner) -- (jobs_static) node[midway, right, font=\scriptsize] {\texttt{Docker API}};
+                \draw[arrow] (runner) -- (jobs_dast) node[midway, right, font=\scriptsize] {\texttt{Docker API}};
+
+% Тестирование стенда DAST
+                \draw[bidir, red!75!black] (jobs_dast) -- (app_stand)
+                node[midway, above, font=\scriptsize] {HTTP REST API}
+                node[midway, below, font=\scriptsize] {(\texttt{openapi.yml})};
+
+            \end{tikzpicture}%
+        }%
+    }
+    \caption{Схема архитектуры сборочно-проверочной среды ПО и потоков данных}
+    \label{fig:arch}
+\end{figure}
+
