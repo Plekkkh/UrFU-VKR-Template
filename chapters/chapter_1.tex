@@ -1,180 +1,255 @@
 \newpage
-\chapter{Расчеты домашнего задания}\label{ch:homework}
 
-\section{Расчет уровня собственного теплового шума приемника}
+% chktex-file 18
 
-Уровень собственного теплового шума $N$ приемника в полосе пропускания $\mathrm{BW} = 100\text{ кГц} = 10^5\text{ Гц}$ при коэффициенте шума $\mathrm{NF} = 6\text{ дБ}$ определяется выражением:
-\begin{equation}
-    N = -174 + 10 \cdot \lg(\mathrm{BW}) + \mathrm{NF}
-    \label{eq:noise_level}
-\end{equation}
-Подставляя численные значения, получим:
-\begin{equation*}
-    N = -174 + 10 \cdot \lg(10^5) + 6 = -174 + 50 + 6 = -118.0\text{ дБм}.
-\end{equation*}
+\section{Описание выполненных настроек}
 
-\section{Расчет затухания ПЭМИ на трассе распространения}
-Для частоты излучения $f = 148.5\text{ МГц}$ (диапазон $47.75\text{ МГц} < f \leqslant 1800\text{ МГц}$) коэффициент затухания $L_V$ (в разах по напряжению) рассчитывается по формуле:
-\begin{equation}
-    L_V \approx
-    \begin{cases}
-        R^2, & \text{если } R \leqslant \dfrac{1800}{f}; \\[14pt]
-        \dfrac{1800 \cdot R}{f}, & \text{если } R > \dfrac{1800}{f}.
-    \end{cases}
-    \label{eq:attenuation_coefficient}
-\end{equation}
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|
+    >{\hsize=0.55\hsize\raggedright\arraybackslash}X|
+    >{\hsize=0.75\hsize\raggedright\arraybackslash}X|
+    >{\hsize=1.25\hsize\raggedright\arraybackslash}X|
+    >{\hsize=1.45\hsize\raggedright\arraybackslash}X|}
+\hline
+Наименование виртуальной машины &
+Где выполняется настройка &
+Способ выполнения настройки &
+Данные для выполнения настройки \\
+\hline
+\endfirsthead
 
-Определим граничное расстояние перехода между зонами затухания:
-\begin{equation}
-    r_{\text{гр}} = \frac{1800}{f} = \frac{1800}{148.5} = 12.12\text{ м}.
-    \label{eq:boundary_distance}
-\end{equation}
+\hline
+Наименование виртуальной машины &
+Где выполняется настройка &
+Способ выполнения настройки &
+Данные для выполнения настройки \\
+\hline
+\endhead
 
-Перевод коэффициента затухания в децибелы осуществляется по формуле:
-\begin{equation}
-    L_V\text{ [дБ]} = 20 \cdot \lg(L_V).
-    \label{eq:attenuation_coefficient_db}
-\end{equation}
+\hline
+\endfoot
 
-Выполним расчет для заданных дистанций.
-При $R = 1\text{ м}$:
-\begin{equation*}
-    L_V(1) = 1^2 = 1\text{ раз} \Rightarrow L_V\text{ [дБ]} = 20\lg(1) = 0.00\text{ дБ}.
-\end{equation*}
+Хостовая машина (Windows) / VMware Workstation &
+Настройки ВМ \texttt{Preloader} (Shared Folders) &
+Открыть свойства ВМ \texttt{Preloader}, перейти на вкладку Options -- Shared Folders, выбрать Always enabled, нажать Add\ldots и подключить общую папку хоста для обмена файлами с ВМ. &
+Общий каталог хоста, доступный в ВМ по пути \texttt{/mnt/\allowbreak hgfs}. \\
+\hline
 
-При $R = 2\text{ м}$:
-\begin{equation*}
-    L_V(2) = 2^2 = 4\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(4) = 12.04\text{ дБ}.
-\end{equation*}
+Preloader (Debian 10) &
+Терминал ОС (файловая система и эмулятор QEMU/OVMF) &
+Войти под учетной записью \texttt{root}. При необходимости смонтировать общую папку. Создать каталог \texttt{test-uefi} и подкаталог \texttt{hd-contents}, скопировать образ прошивки OVMF (\texttt{bios.bin}) и приложение \texttt{HelloWorld.efi}. Запустить эмуляцию UEFI в QEMU. &
+Учетные данные: \texttt{root} / \texttt{P@ssw0rd}\par
+\vspace{4pt}
+Команды:\par
+\texttt{mount /mnt/hgfs}\par
+\texttt{mkdir -p \textasciitilde{}/test-uefi/\allowbreak hd-contents}\par
+\texttt{cp /usr/\allowbreak share/\allowbreak ovmf/\allowbreak OVMF.fd \textasciitilde{}/test-uefi/\allowbreak bios.bin}\par
+\texttt{cp /usr/\allowbreak src/\allowbreak edk2/\allowbreak Build/\allowbreak MdeModule/\allowbreak DEBUG\_GCC5/\allowbreak X64/\allowbreak HelloWorld.efi \textasciitilde{}/test-uefi/\allowbreak hd-contents/}\par
+\texttt{cd \textasciitilde{}/test-uefi}\par
+\texttt{qemu-system-x86\_64 -pflash bios.bin -net none -hda fat:rw:hd-contents} \\
+\hline
 
-При $R = 5\text{ м}$:
-\begin{equation*}
-    L_V(5) = 5^2 = 25\text{ раз} \Rightarrow L_V\text{ [дБ]} = 20\lg(25) = 27.96\text{ дБ}.
-\end{equation*}
 
-При $R = 10\text{ м}$:
-\begin{equation*}
-    L_V(10) = 10^2 = 100\text{ раз} \Rightarrow L_V\text{ [дБ]} = 20\lg(100) = 40.00\text{ дБ}.
-\end{equation*}
+Хостовая машина (Windows) &
+Windows PowerShell (командлеты PKI: \texttt{New-\allowbreak SelfSigned\allowbreak Certificate}, \texttt{Export-\allowbreak Certificate}, \texttt{Export-\allowbreak PfxCertificate}) &
+Создать рабочий каталог для ключевой информации (\texttt{lab1-uefi\_keys}). Сгенерировать самоподписанный корневой сертификат Platform Key (\texttt{Test\_PK}), затем выпустить и подписать им сертификат подписи кода Key Exchange Key (\texttt{Test\_KEK}). Экспортировать оба сертификата в DER-формат (\texttt{.cer}) для импорта в UEFI и экспортировать \texttt{Test\_KEK} с закрытым ключом в контейнер \texttt{.pfx}. (Использован PowerShell вместо устаревшей утилиты \texttt{makecert.exe}.) &
+Пароль: \texttt{P@ssw0rd}\par
+\vspace{4pt}
+\texttt{\$pwd = ConvertTo-SecureString -String "P@ssw0rd" -Force -AsPlainText}\par
+\vspace{3pt}
+\texttt{\$pk = New-\allowbreak SelfSigned\allowbreak Certificate -Subject "CN=Test\_PK" -Type Custom -KeySpec Signature -KeyAlgorithm RSA -KeyLength 2048 -HashAlgorithm SHA256 -KeyUsage CertSign, CRLSign, DigitalSignature -TextExtension @("2.5.29.19=\allowbreak\{critical\}\allowbreak\{text\}ca=true") -KeyExportPolicy Exportable -CertStoreLocation "Cert:\textbackslash{}CurrentUser\textbackslash{}My"}\par
+\vspace{3pt}
+\texttt{\$kek = New-\allowbreak SelfSigned\allowbreak Certificate -Subject "CN=Test\_KEK" -Type CodeSigningCert -Signer \$pk -KeySpec Signature -KeyAlgorithm RSA -KeyLength 2048 -HashAlgorithm SHA256 -KeyExportPolicy Exportable -CertStoreLocation "Cert:\textbackslash{}CurrentUser\textbackslash{}My"}\par
+\vspace{3pt}
+\texttt{Export-Certificate -Cert \$pk -FilePath ".\textbackslash{}TestPK.cer" -Type CERT}\par
+\texttt{Export-Certificate -Cert \$kek -FilePath ".\textbackslash{}TestKEK.cer" -Type CERT}\par
+\texttt{Export-PfxCertificate -Cert \$kek -FilePath ".\textbackslash{}TestKEK.pfx" -Password \$pwd}\par
+\vspace{3pt}
+Файлы: \texttt{TestPK.cer}, \texttt{TestKEK.cer}, \texttt{TestKEK.pfx}. \\
+\hline
 
-При $R = 20\text{ м}$:
-\begin{equation*}
-    L_V(20) = \dfrac{1800 \cdot 20}{148.5} = 242.42\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(242.42) = 47.69\text{ дБ}.
-\end{equation*}
+Preloader (Debian 10) &
+Файловая система ВМ &
+При остановленной эмуляции QEMU скопировать файлы сертификатов \texttt{TestPK.cer} и \texttt{TestKEK.cer} из общей папки в каталог виртуального диска \texttt{\textasciitilde{}/test-uefi/hd-contents/}. &
+Команда:\par
+\texttt{cp /mnt/\allowbreak hgfs/\allowbreak shared/\allowbreak lab1-uefi\_keys/\allowbreak *.cer \textasciitilde{}/test-uefi/\allowbreak hd-contents/} \\
+\hline
 
-При $R = 30\text{ м}$:
-\begin{equation*}
-    L_V(30) = \dfrac{1800 \cdot 30}{148.5} = 363.64\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(363.64) = 51.21\text{ дБ}.
-\end{equation*}
+Preloader (эмуляция UEFI в QEMU) &
+Утилита настройки UEFI (OVMF Setup -- Secure Boot Configuration) &
+Выйти из UEFI Shell командой \texttt{exit}. Перейти в Device Manager -- Secure Boot Configuration. Перевести Secure Boot Mode в Custom Mode и открыть Custom Secure Boot Options. Последовательно в пунктах PK Options и KEK Options выбрать Enroll \ldots -- Enroll \ldots Using File, указать соответствующие \texttt{.cer}-файлы и сохранить изменения (Commit Changes and Exit). Перезагрузить эмуляцию. &
+Импортируемые файлы:\par
+PK Options: \texttt{TestPK.cer}\par
+KEK Options: \texttt{TestKEK.cer} \\
+\hline
 
-При $R = 50\text{ м}$:
-\begin{equation*}
-    L_V(50) = \dfrac{1800 \cdot 50}{148.5} = 606.06\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(606.06) = 55.65\text{ дБ}.
-\end{equation*}
+Хостовая машина (Windows) &
+PowerShell / утилита \texttt{signtool.exe} (Microsoft Windows SDK) &
+Скопировать \texttt{HelloWorld.efi} в каталог с ключами. Подписать файл сертификатом \texttt{Test\_KEK} с указанием SHA-1 отпечатка сертификата (так как контейнер \texttt{.pfx} содержит цепочку сертификатов) и алгоритмом хэширования \texttt{sha256}. Скопировать подписанный файл \texttt{HelloWorld.efi} обратно в каталог \texttt{\textasciitilde{}/test-uefi/hd-contents/} на ВМ \texttt{Preloader}. &
+Команда:\par
+\texttt{.\textbackslash{}signtool.exe sign /ac .\textbackslash{}TestKEK.cer /f .\textbackslash{}TestKEK.pfx /p P@ssw0rd /sha1 \seqsplit{F3C8F724B7C93BD11167370E110C671120E1D7C7} /fd sha256 .\textbackslash{}HelloWorld.efi} \\ % chktex 26
+\hline
 
-При $R = 80\text{ м}$:
-\begin{equation*}
-    L_V(80) = \dfrac{1800 \cdot 80}{148.5} = 969.70\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(969.70) = 59.73\text{ дБ}.
-\end{equation*}
+Preloader (эмуляция UEFI в QEMU) &
+Утилита настройки UEFI (Custom Secure Boot Options -- DB Options) &
+Вариант А: перейти в Device Manager -- Secure Boot Configuration -- Custom Secure Boot Options -- DB Options -- Enroll Signature -- Enroll Signature Using File, выбрать \texttt{TestKEK.cer}, сохранить и перезагрузить эмуляцию.\par
+\vspace{4pt}
+Вариант Б: удалить запись \texttt{TestKEK.cer} из DB Options (Delete Signature), добавить сигнатуру самого приложения \texttt{HelloWorld.efi} (Enroll Signature Using File -- \texttt{HelloWorld.efi}), сохранить и перезагрузить эмуляцию. &
+Разрешенные сигнатуры (переменная \texttt{db}):\par
+Вариант А: \texttt{TestKEK.cer}\par
+Вариант Б: \texttt{HelloWorld.efi} \\
+\hline
 
-При $R = 100\text{ м}$:
-\begin{equation*}
-    L_V(100) = \dfrac{1800 \cdot 100}{148.5} = 1212.12\text{ раза} \Rightarrow L_V\text{ [дБ]} = 20\lg(1212.12) = 61.67\text{ дБ}.
-\end{equation*}
+Хостовая машина (Windows) &
+HEX-редактор HxD &
+Открыть подписанный файл \texttt{HelloWorld.efi} в редакторе HxD. Найти строку \texttt{UEFI Hello World!} в кодировке UTF-16, изменить слово \texttt{UEFI} с сохранением длины строки, сохранить файл и скопировать его в \texttt{\textasciitilde{}/test-uefi/hd-contents/} на ВМ \texttt{Preloader}. &
+Изменение строки (UTF-16LE):\par
+Было: \texttt{UEFI Hello World!}\par
+Стало: \texttt{BIOS Hello World!} \\
+\hline
 
-\section{Расчет мощности сигнала на входе приемника и отношения сигнал/шум}
+Preloader (эмуляция UEFI в QEMU) &
+Утилита настройки UEFI (Secure Boot Configuration) &
+Открыть настройки UEFI, перейти в Device Manager -- Secure Boot Configuration, снять флаг опции Attempt Secure Boot, сохранить изменения и перезагрузить эмуляцию. &
+Параметр Attempt Secure Boot: отключен (\texttt{[ ]}). \\
+\hline
+\end{tabularx}
+\endgroup
 
-Мощность сигнала $P_{rx}$ на входе приемника и отношение сигнал/шум $\mathrm{SNR}$ определяются выражениями:
-\begin{equation}
-    P_{rx} = P_{tx} + G_{rx} - L_V\text{ [дБ]},
-    \label{eq:received_power}
-\end{equation}
-\begin{equation}
-    \mathrm{SNR} = P_{rx} - N.
-    \label{eq:SNR}
-\end{equation}
 
-Пример расчета для дистанции $R = 2\text{ м}$ ($L_V = 12.04\text{ дБ}$):
+\section{Описание проверок}
 
-Всенаправленная антенна ($G_{rx1} = 2.15\text{ дБи}$):
-\begin{equation*}
-    P_{rx1}(2) = -68.0 + 2.15 - 12.04 = -77.89\text{ дБм},
-\end{equation*}
-\begin{equation*}
-    \mathrm{SNR}_1(2) = -77.89 - (-118.0) = +40.11\text{ дБ}.
-\end{equation*}
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|
+    >{\hsize=1.15\hsize\raggedright\arraybackslash}X|
+    >{\hsize=0.85\hsize\raggedright\arraybackslash}X|}
+\hline
+Описание проверки & Ожидаемый результат \\
+\hline
+\endfirsthead
 
-Направленная антенна ($G_{rx2} = 12.0\text{ дБи}$):
-\begin{equation*}
-    P_{rx2}(2) = -68.0 + 12.0 - 12.04 = -68.04\text{ дБм},
-\end{equation*}
-\begin{equation*}
-    \mathrm{SNR}_2(2) = -68.04 - (-118.0) = +49.96\text{ дБ}.
-\end{equation*}
+\hline
+Описание проверки & Ожидаемый результат \\
+\hline
+\endhead
 
-Результаты расчетов для всех дистанций сведены в таблицу~\ref{tab:homework_results}.
+\hline
+\endfoot
 
-\begin{table}[H]
-    \footnotesize
-    \renewcommand{\arraystretch}{1.3}
-    \centering
-    \begin{tabularx}{\textwidth}{|c|Y|Y|Y|Y|Y|Y|}
-        \hline
-        \multirow{2}{*}{$R$, м} & \multirow{2}{*}{$L_V$, раз} & \multirow{2}{*}{$L_V$, дБ} & \multicolumn{2}{c|}{Всенаправленная ($G = 2.15$ дБи)} & \multicolumn{2}{c|}{Направленная ($G = 12.0$ дБи)} \\ \cline{4-7}
-         & & & $P_{rx1}$, дБм & $\mathrm{SNR}_1$, дБ & $P_{rx2}$, дБм & $\mathrm{SNR}_2$, дБ \\ \hline
-        1 & 1.00 & 0.00 & $-65.85$ & $+52.15$ & $-56.00$ & $+62.00$ \\ \hline
-        2 & 4.00 & 12.04 & $-77.89$ & $+40.11$ & $-68.04$ & $+49.96$ \\ \hline
-        5 & 25.00 & 27.96 & $-93.81$ & $+24.19$ & $-83.96$ & $+34.04$ \\ \hline
-        10 & 100.00 & 40.00 & $-105.85$ & $+12.15$ & $-96.00$ & $+22.00$ \\ \hline
-        20 & 242.42 & 47.69 & $-113.54$ & $+4.46$ & $-103.69$ & $+14.31$ \\ \hline
-        30 & 363.64 & 51.21 & $-117.06$ & $+0.94$ & $-107.21$ & $+10.79$ \\ \hline
-        50 & 606.06 & 55.65 & $-121.50$ & $-3.50$ & $-111.65$ & $+6.35$ \\ \hline
-        80 & 969.70 & 59.73 & $-125.58$ & $-7.58$ & $-115.73$ & $+2.27$ \\ \hline
-        100 & 1212.12 & 61.67 & $-127.52$ & $-9.52$ & $-117.67$ & $+0.33$ \\ \hline
-    \end{tabularx}
-    \caption{Результаты теоретического расчета параметров канала утечки ПЭМИ}
-    \label{tab:homework_results}
-\end{table}
+1. В базовой конфигурации (до активации Secure Boot) перейти на раздел \texttt{fs0:}, просмотреть содержимое (\texttt{dir}) и запустить неподписанное приложение \texttt{HelloWorld.efi}. &
+Приложение успешно запускается и выводит строку \texttt{UEFI Hello World!}. \\
+\hline
 
-Определим максимальную расчетную дальность обнаружения сигнала из условия $\mathrm{SNR} = 0\text{ дБ}$ (предельное затухание $L_{V\max} = P_{tx} + G_{rx} - N$):
+2. В UEFI Shell проверить значение переменной \texttt{SetupMode} командой \texttt{setvar SetupMode} до установки ключа PK. &
+Переменная \texttt{SetupMode} имеет значение \texttt{01} (система находится в режиме настройки -- Setup Mode). \\
+\hline
 
-Для всенаправленной антенны: $L_{V\max1} = -68 + 2.15 - (-118) = 52.15\text{ дБ}$ ($405.0\text{ раз}$), откуда:
-\begin{equation*}
-    R_{\max1} = \frac{L_{V\max1} \cdot f}{1800} = \frac{405.0 \cdot 148.5}{1800} = 33.4\text{ м}.
-\end{equation*}
+3. После импорта ключей PK и KEK и перезагрузки проверить переменную \texttt{SetupMode} и попытаться запустить неподписанный файл \texttt{HelloWorld.efi}. &
+Переменная \texttt{SetupMode} имеет значение \texttt{00} (User Mode). Запуск заблокирован, выводится сообщение \texttt{Command Error Status: Security Violation}. \\
+\hline
 
-Для направленной антенны: $L_{V\max2} = -68 + 12.0 - (-118) = 62.00\text{ дБ}$ ($1258.9\text{ раза}$), откуда:
-\begin{equation*}
-    R_{\max2} = \frac{L_{V\max2} \cdot f}{1800} = \frac{1258.9 \cdot 148.5}{1800} = 103.9\text{ м}.
-\end{equation*}
+4. На хостовой машине Windows открыть свойства подписанного файла \texttt{HelloWorld.efi} на вкладке «Цифровые подписи». &
+В списке отображается цифровая подпись от имени \texttt{Test\_KEK} с алгоритмом хэширования \texttt{sha256}. \\
+\hline
 
-Получается, что замена всенаправленной антенны на направленную дает выигрыш по мощности $\Delta G = 12.0 - 2.15 = 9.85\text{ дБ}$ и увеличивает расчетную дальность перехвата в дальней зоне в $10^{9.85/20} = 3.11\text{ раза}$.
+5. Попытаться запустить подписанный файл \texttt{HelloWorld.efi} в UEFI Shell при пустой базе разрешенных сигнатур (\texttt{db}). &
+Запуск заблокирован, выводится сообщение \texttt{Command Error Status: Security Violation}. \\
+\hline
 
-\section{Расчет снижения уровня шума при сужении полосы ПЧ вольтметра}
+6. Добавить сертификат \texttt{TestKEK.cer} в DB Options, перезагрузить эмуляцию и запустить подписанный файл \texttt{HelloWorld.efi}. &
+Приложение успешно проходит проверку подписи и выводит строку \texttt{UEFI Hello World!}. \\
+\hline
 
-При сужении полосы ПЧ селективного микровольтметра с $\Delta f_1 = 200\text{ кГц}$ до $\Delta f_2 = 0.2\text{ кГц}$ мощность шума снижается пропорционально отношению полос, а действующее напряжение шума $U_{\text{ш}}$ на табло вольтметра — пропорционально квадратному корню из отношения полос:
-\begin{equation}
-    K_U = \sqrt{\frac{\Delta f_1}{\Delta f_2}} = \sqrt{\frac{200\text{ кГц}}{0.2\text{ кГц}}} = \sqrt{1000} = 31.62\text{ раза}.
-    \label{eq:noise_reduction_factor}
-\end{equation}
+7. Удалить \texttt{TestKEK.cer} из DB Options, добавить в DB Options сигнатуру файла \texttt{HelloWorld.efi}, перезагрузить эмуляцию и запустить \texttt{HelloWorld.efi}. &
+Приложение успешно запускается и выводит строку \texttt{UEFI Hello World!}. \\
+\hline
 
-\section{Расчет параметров структуры полного видеосигнала $\mathbf{1920 \times 1080}$ ($\mathbf{60}\text{ Гц}$)}
+8. Модифицировать подписанный файл \texttt{HelloWorld.efi} в редакторе HxD, скопировать его в \texttt{hd-contents} и попытаться запустить при включенном Secure Boot. &
+Запуск модифицированного файла заблокирован, выводится сообщение \texttt{Command Error Status: Security Violation}. \\
+\hline
 
-Количество активных строк в кадре: $N_{\text{акт}} = h = 1080\text{ строк}$.
-Общее количество строк в кадре (активные + служебные):
-\begin{equation}
-    N_{\text{полн}} = h + V_{porch} = 1080 + 45 = 1125\text{ строк}.
-    \label{eq:total_lines}
-\end{equation}
+9. Отключить опцию Attempt Secure Boot в настройках UEFI, перезагрузить эмуляцию и запустить модифицированный файл \texttt{HelloWorld.efi}. &
+Приложение успешно запускается и выводит измененную строку приветствия. \\
+\hline
+\end{tabularx}
+\endgroup
 
-Длительность строчного гасящего интервала во времени:
-\begin{equation}
-    t_{H\_porch} = \frac{H_{porch}}{f_{pixel}} = \frac{280}{148.5 \cdot 10^6\text{ Гц}} = 1.89 \cdot 10^{-6}\text{ с} = 1.89\text{ мкс}.
-    \label{eq:horizontal_porch}
-\end{equation}
 
-Длительность кадрового гасящего интервала во времени:
-\begin{equation}
-    t_{V\_porch} = \frac{V_{porch}}{f_H} = \frac{45}{67.5 \cdot 10^3\text{ Гц}} = 0.667 \cdot 10^{-3}\text{ с} = 0.667\text{ мс}.
-    \label{eq:vertical_porch}
-\end{equation}
+\section{Результат выполнения проверки}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|
+    >{\hsize=0.65\hsize\raggedright\arraybackslash}X|
+    >{\raggedright\arraybackslash}p{2.2cm}|
+    >{\hsize=1.35\hsize\raggedright\arraybackslash}X|}
+\hline
+Проверка & Результат & Свидетельство \\
+\hline
+\endfirsthead
+
+\hline
+Проверка & Результат & Свидетельство \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+1. Запуск неподписанного \texttt{HelloWorld.efi} до активации Secure Boot &
+Успешно &
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,valign=t]{1NoSecBoot.png} \\
+\hline
+
+2. Проверка значения переменной \texttt{SetupMode} до установки PK &
+Успешно &
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,valign=t]{2SetupMode01.png} \\
+\hline
+
+3. Проверка \texttt{SetupMode} и попытка запуска неподписанного \texttt{HelloWorld.efi} после установки PK и KEK &
+Успешно &
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,valign=t]{3SetupMode00.png} \\
+\hline
+
+4. Проверка цифровой подписи \texttt{HelloWorld.efi} в свойствах файла Windows &
+Успешно &
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,valign=t]{4HelloWorld_signed.png} \\
+\hline
+
+5. Попытка запуска подписанного \texttt{HelloWorld.efi} при пустой переменной \texttt{db} &
+Успешно &
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,valign=t]{5SecBootSigned.png} \\
+\hline
+
+6. Запуск подписанного \texttt{HelloWorld.efi} после добавления сертификата \texttt{TestKEK.cer} в DB Options &
+Успешно &
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio,valign=t]{6EnrollSignatureKEK.png}\par
+\vspace{4pt}
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{7EnrollSignatureKEK_HelloWorld.png} \\
+\hline
+
+7. Запуск подписанного \texttt{HelloWorld.efi} после добавления сигнатуры файла \texttt{HelloWorld.efi} в DB Options &
+Успешно &
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio,valign=t]{8EnrollSignatureHelloWorld.png}\par
+\vspace{4pt}
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{9EnrollSignatureHelloWorld_HelloWorld.png} \\
+\hline
+
+8. Попытка запуска модифицированного в HxD файла \texttt{HelloWorld.efi} при активном Secure Boot &
+Успешно &
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio,valign=t]{10HxDHelloWorld.png}\par
+\vspace{4pt}
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{11HxDHelloWorld-SecViolation.png} \\
+\hline
+
+9. Запуск модифицированного файла \texttt{HelloWorld.efi} после отключения Attempt Secure Boot &
+Успешно &
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,valign=t]{12AttemptSecureBoot0.png} \\
+\hline
+\end{tabularx}
+\endgroup
