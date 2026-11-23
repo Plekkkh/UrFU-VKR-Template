@@ -1,139 +1,172 @@
 \newpage
 \chapter{Приведение скриншотов и листинг команд}
 
-\section{Заполнение базы данных и проверка выборки}
+\section{Реализация доступа пользователей и разграничение полномочий}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=0.8\textwidth]{images/listing1}
-    \caption{Листинг SQL-команд заполнения базы данных кортежами (часть 1)}
-    \label{fig:listing1}
+    \includegraphics[width=1\textwidth]{images/1_switching_to_mixed_authentification_mode}
+    \caption{Настройка смешанного режима аутентификации в свойствах сервера}
+    \label{fig:switching_to_mixed_authentication_mode}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=0.8\textwidth]{images/listing2}
-    \caption{Листинг SQL-команд заполнения базы данных кортежами (часть 2)}
-    \label{fig:listing2}
+    \includegraphics[width=1\textwidth]{images/1_access_control.sql (1)}
+    \caption{Листинг SQL-команд создания учетных записей администраторов и пользователей, ролей и разграничения прав доступа (часть 1)}
+    \label{fig:access_control1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/insert_check}
-    \caption{Подтверждение заполнения отношений базы данных тестовыми кортежами}
-    \label{fig:insert_check}
-\end{figure}
-
-\section{Подготовка к экспорту, закрытие соединений и проверка целостности}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/listing3}
-    \caption{Листинг SQL-команд подготовки к экспорту, закрытия соединений и проверки целостности базы данных}
-    \label{fig:listing3}
+    \includegraphics[width=0.85\textwidth]{images/1_access_control.sql (2)}
+    \caption{Листинг SQL-команд создания учетных записей администраторов и пользователей, ролей и разграничения прав доступа (часть 2)}
+    \label{fig:access_control2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/pre_export_check}
-    \caption{Результат установки администратора, закрытия соединений и проверки целостности перед экспортом}
-    \label{fig:pre_export_check}
+    \includegraphics[width=1\textwidth]{images/2_created_users_check}
+    \caption{Проверка созданных учетных записей и распределения ролей в БД}
+    \label{fig:created_users_check}
 \end{figure}
 
-\section{Экспорт данных в виде скрипта и через утилиту bcp}
+\section{Тестирование учетных записей и проверка разграничения доступа}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/script_generating}
-    \caption{Создание скрипта \code{export\_data.sql} в среде SSMS}
-    \label{fig:script_generating}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/bcp_export}
-    \caption{Выгрузка данных в пользовательский документ \code{books\_export.txt} с помощью утилиты \code{bcp}}
-    \label{fig:bcp_export}
-\end{figure}
-
-\begin{table}[H]
-    \small
-    \renewcommand{\arraystretch}{1.3}
-    \centering
-    \begin{tabularx}{\textwidth}{c c X c c r r r}
-        1 & 1 & Безопасность баз данных на практике  & 978-5-00000-001-1 & 2025 & 420 & 3000 & 1250.00 \\
-        2 & 2 & Архитектура современных СУБД        & 978-5-00000-002-8 & 2025 & 350 & 2000 & 980.00  \\
-        3 & 3 & Криптографическая защита информации & 978-5-00000-003-5 & 2026 & 512 & 5000 & 1600.00 \\
-        4 & 4 & Сетевые протоколы и администрирование & 978-5-00000-004-2 & 2026 & 280 & 1500 & 850.00  \\
-        5 & 3 & Аудит информационной безопасности  & 978-5-00000-005-9 & 2026 & 390 & 2500 & 1100.00 \\
-    \end{tabularx}
-    \caption{Фрагмент экспортированных данных из текстового документа \code{books\_export.txt}}
-    \label{tab:books_export}
-\end{table}
-
-\section{Подготовка и выполнение импорта данных}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/listing4}
-    \caption{Листинг SQL-команд подготовки к импорту данных из документов пользователя в базу данных}
-    \label{fig:listing4}
+    \includegraphics[width=1\textwidth]{images/2_test_accounts.sql}
+    \caption{Листинг SQL-команд тестирования полномочий учетных записей}
+    \label{fig:test_accounts}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/script_import}
-    \caption{Выполнение импорта данных из документов пользователя в базу}
-    \label{fig:script_import}
+    \includegraphics[width=1\textwidth]{images/3_user_manager_login}
+    \caption{Подключение к серверу БД под учетной записью менеджера}
+    \label{fig:user_manager_login}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/import_integrity_check}
-    \caption{Результат контрольной выборки данных и проверки целостности БД после завершения импорта}
-    \label{fig:import_integrity_check}
-\end{figure}
-
-\section{Скрипт и настройка автоматизации обслуживания базы данных}
-
-\begin{figure}[H]
-    \centering
-    % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/listing5}
-    \caption{Листинг SQL-команд скрипта автоматизированного обслуживания базы данных и создания резервной копии}
-    \label{fig:listing5}
+    \includegraphics[width=1\textwidth]{images/4_admin_test}
+    \caption{Результаты тестирования привилегий учетной записи администратора}
+    \label{fig:admin_test}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/auto_maintenance}
-    \caption{Результат выполнения скрипта автоматизированного обслуживания и создания резервной копии}
-    \label{fig:auto_maintenance}
+    \includegraphics[width=1\textwidth]{images/5_user_manager_test}
+    \caption{Результаты тестирования прав доступа учетной записи менеджера}
+    \label{fig:user_manager_test}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/task_schedule_daily}
-    \caption{Настройка ежедневного расписания выполнения автоматических операций}
-    \label{fig:task_schedule_daily}
+    \includegraphics[width=1\textwidth]{images/6_user_editor_test}
+    \caption{Результаты тестирования прав доступа учетной записи редактора}
+    \label{fig:user_editor_test}
+\end{figure}
+
+\section{Настройка сбора журналов событий безопасности}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/7_login_auditing}
+    \caption{Включение регистрации успешных и неудачных попыток входа в настройках безопасности СУБД}
+    \label{fig:login_auditing}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     % Замените на имя вашего файла с графиком
-    \includegraphics[width=1.0\textwidth]{images/task_schedule_action}
-    \caption{Настройка действия запуска скрипта обслуживания в планировщике задач}
-    \label{fig:task_schedule_action}
+    \includegraphics[width=0.9\textwidth]{images/3_security_audit_setup.sql}
+    \caption{Листинг SQL-команд настройки серверного и объектного аудита безопасности}
+    \label{fig:security_audit_setup}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/8_audit_check}
+    \caption{Проверка статуса созданных журналов аудита безопасности}
+    \label{fig:audit_check}
+\end{figure}
+
+\section{Мониторинг активных подключений к базе данных}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/4_connection_monitoring.sql}
+    \caption{Листинг SQL-команд мониторинга пользовательских сессий и активных подключений}
+    \label{fig:connection_monitoring}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/9_connections_check}
+    \caption{Результат мониторинга активных подключений к базе данных}
+    \label{fig:connections_check}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/10_activity_monitor}
+    \caption{Мониторинг процессов и подключений пользователей в графической консоли Activity Monitor}
+    \label{fig:activity_monitor}
+\end{figure}
+
+\section{Имитация инцидентов безопасности и проверка системы мониторинга}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/5_sus_activity.sql}
+    \caption{Листинг SQL-команд имитации подозрительной активности пользователей}
+    \label{fig:sus_activity}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/11_failed_logins_imitation}
+    \caption{Имитация многократного неудачного входа пользователя в систему}
+    \label{fig:failed_logins_imitation}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/6_verify_audit_logs.sql}
+    \caption{Листинг SQL-команд чтения журналов аудита и детектирования подозрительных событий}
+    \label{fig:verify_audit_logs}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/12_verifying_audit_logs}
+    \caption{Выгрузка зарегистрированных событий безопасности из журнала SQL Server Audit}
+    \label{fig:verifying_audit_logs}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % Замените на имя вашего файла с графиком
+    \includegraphics[width=1\textwidth]{images/13_detection_analysis}
+    \caption{Результаты автоматизированного детектирования подозрительных действий и серии неудачных попыток входа}
+    \label{fig:detection_analysis}
 \end{figure}
